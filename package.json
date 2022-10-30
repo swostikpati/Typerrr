@@ -1,0 +1,25 @@
+{
+  "name": "roll-on",
+  "version": "1.0.0",
+  "description": "Connections Lab Midterm Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swostikpati/Roll-On.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swostikpati/Roll-On/issues"
+  },
+  "homepage": "https://github.com/swostikpati/Roll-On#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nedb": "^1.8.0",
+    "socket.io": "^4.5.3"
+  }
+}
