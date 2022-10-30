@@ -7,14 +7,4 @@ npm install
 npm start
 ```
 
-hell world
-
-
-
-
-
-
-
-
-okay
 
