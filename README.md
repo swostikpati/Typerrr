@@ -6,5 +6,5 @@ Run the following code:
 npm install
 npm start
 ```
-#Wireframe of the game
+# Wireframe of the game
 
