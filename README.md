@@ -6,15 +6,5 @@ Run the following code:
 npm install
 npm start
 ```
-
-hell world
-
-
-
-
-
-
-
-
-okay
+#Wireframe of the game
 
