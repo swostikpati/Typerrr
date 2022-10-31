@@ -8,3 +8,5 @@ npm start
 ```
 # Wireframe of the game
 
+![](images/1.png)
+
