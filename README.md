@@ -41,6 +41,10 @@ This is the [initial wireframe](https://github.com/swostikpati/Typerrr/blob/main
 
 • As soon as the race ends, the current positions of each of the clients displayed and a win is registered against the person who comes first. 
 
+• The highscore page (containing the top 10 high scores obtained by sorting the database based on total winds in descending order ) is updated at the end of every race to get the most recent stats.
+
+• The end screen also gives the user the option to enter another race. If they choose to do this, the server puts them in another room to race.
+
 Run the following code:
 ```
 npm install
