@@ -11,7 +11,7 @@ Games like Nitrotype, 10fastfingers, keybr. The primary motivation behind making
 
 ## Wireframe of the game
 
-This is the [initial wireframe](https://github.com/swostikpati/Typerrr/blob/main/Wireframe_Typerrr.pdf) of the project.
+This was the [initial wireframe](https://github.com/swostikpati/Typerrr/blob/main/Wireframes/initial_wireframe.png) of the project. After brainstorming changes, we decided on this [final wireframe](https://github.com/swostikpati/Typerrr/blob/main/Wireframes/final_wireframe.pdf)
 
 ## Information Flow
 
