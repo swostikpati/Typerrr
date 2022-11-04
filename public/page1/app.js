@@ -29,3 +29,10 @@ start_bt.addEventListener("click", () => {
     socket.emit("raceStarted");
 })
 
+//added keypress event
+document.addEventListener('keypress', (event) => {
+    var name = event.key;
+    var code = event.code;
+    // Alert the key name and key code on keydown
+    console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
+}, false);
