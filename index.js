@@ -6,12 +6,6 @@ const PORT = 3000;
 let http = require("http");
 let server = http.createServer(app);
 
-
-//variables
-let tr = 0; //current room number
-let rooms = {};
-let newRoomFlag = false;
-
 server.listen(PORT, () => {
     console.log("listerning on port 3000");
 })
@@ -21,6 +15,12 @@ app.use("/", express.static("public/page1"))
 let io = require("socket.io");
 io = new io.Server(server);
 
+
+//variables
+let tr = 0; //current room number
+let rooms = {};
+let newRoomFlag = true;
+
 io.sockets.on("connect", (socket) => {
     console.log("New connection:", socket.id);
 
@@ -28,31 +28,51 @@ io.sockets.on("connect", (socket) => {
     socket.on("disconnect", () => {
         console.log("Socket disconnected", socket.id);
         console.log("Room: ", socket.roomNo);
-        rooms[socket.roomNo]--;
-        console.log("Room Capacity: ", rooms[socket.roomNo]);
+        rooms[socket.roomNo].cap--;
+        console.log("Room Capacity: ", rooms[socket.roomNo].cap);
     })
 
-    for (let i = 0; i <= tr; i++) {
-        if (rooms[i] < 4) {
-            socket.roomNo = i;
-            rooms[i]++;
+    for (let i = 1; i <= tr; i++) {
+        if (rooms[i].cap < 4 && rooms[i].f) {
+            socket.roomNo = rooms[i].n;
+            rooms[i].cap++;
             newRoomFlag = false;
+            if (rooms[i].cap > 3) {
+                io.sockets.to(rooms[i].n).emit("roomFull");
+            }
             break;
         }
         else {
+            // let a = rooms[i].n;
+            // console.log(a);
+            if (rooms[i].f) {
+                io.sockets.to(rooms[i].n).emit("roomFull");
+            }
             newRoomFlag = true;
         }
     }
     if (newRoomFlag) {
+        if (tr != 0) {
+            io.sockets.to(rooms[tr].n).emit("roomFull");
+        }
         tr++;
         socket.roomNo = tr;
         newRoomFlag = false;
-        rooms[tr] = 1;
+        rooms[tr] = { n: tr, f: true, cap: 1 };
     }
     socket.join(socket.roomNo);
-    console.log("Room Capacity: ", rooms[socket.roomNo]);
+    if (rooms[socket.roomNo].cap > 3) {
+        io.sockets.to(socket.roomNo).emit("roomFull");
+    }
+    console.log("Room Capacity: ", rooms[socket.roomNo].cap);
     io.sockets.to(socket.roomNo).emit("roomData", socket.roomNo);
+
+    socket.on("raceStarted", () => {
+        rooms[socket.roomNo].f = false;
+        io.sockets.to(socket.roomNo).emit("startRace");
+    })
 })
+
 
 let datastore = require("nedb");
 let db = new datastore({ filename: "highscores.db", timestampData: true });
