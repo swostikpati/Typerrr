@@ -1,4 +1,5 @@
 let express = require("express");
+let wordsJSON = require("./words1k.json");
 let app = express();
 app.use(express.json());
 const PORT = 3000;
@@ -68,8 +69,12 @@ io.sockets.on("connect", (socket) => {
     io.sockets.to(socket.roomNo).emit("roomData", socket.roomNo);
 
     socket.on("raceStarted", () => {
+        words = ""
+        for (let i = 0; i < 20; i++) {
+            words = words + wordsJSON.words[Math.floor(Math.random() * (1000)) + 1] + " ";
+        }
         rooms[socket.roomNo].f = false;
-        io.sockets.to(socket.roomNo).emit("startRace");
+        io.sockets.to(socket.roomNo).emit("startRace", words);
     })
 })
 

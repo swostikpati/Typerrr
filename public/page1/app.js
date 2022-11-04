@@ -21,18 +21,21 @@ socket.on("roomFull", () => {
     start_bt.disabled = false;
 })
 
-socket.on("startRace", () => {
+socket.on("startRace", (data) => {
     pre_start.style.display = "none";
+    let words = data;
+    console.log(words);
 })
 
 start_bt.addEventListener("click", () => {
     socket.emit("raceStarted");
 })
 
-//added keypress event
+//added keypress event - reference "https://www.section.io/engineering-education/keyboard-events-in-javascript/"
 document.addEventListener('keypress', (event) => {
     var name = event.key;
     var code = event.code;
     // Alert the key name and key code on keydown
     console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
+
 }, false);
