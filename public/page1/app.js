@@ -133,3 +133,5 @@ function changeCol(corr) {
 //use z-index for cursor
 //everytime the index changes - emit to the server based on which current position will be known
 //add the check where one person leaves in the middle of the race...timeout
+
+//if someone exits before start...disable start
