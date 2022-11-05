@@ -43,7 +43,7 @@ This was the [initial wireframe](https://github.com/swostikpati/Typerrr/blob/mai
 
 • The highscore page (containing the top 10 high scores obtained by sorting the database based on total winds in descending order ) is updated at the end of every race to get the most recent stats.
 
-• The end screen also gives the user the option to enter another race. If they choose to do this, the server puts them in another room to race.
+• The end screen also gives the user the option to enter another race. If they choose to do this, the server puts them in another room to race
 
 Run the following code:
 ```
