@@ -1,13 +1,18 @@
 let socket = io(); //establishes connection with the socket server
 
 //variables
-let race = true;
+let raceFlag = false;
+let words;
+let index = 0;
 
 //DOM elements
 const start_bt = document.querySelector("#start-bt");
 const pre_start = document.querySelector(".pre-start");
 const race_time = document.querySelector(".race-time");
 const text_area = document.querySelector(".text-area");
+const untyped = document.querySelector(".untyped");
+const typed_corr = document.querySelector(".typed-corr");
+const typed_wr = document.querySelector(".typed-wr");
 
 //client acknowledging after server confirmation - connect is a keyword
 socket.on("connect", () => {
@@ -26,26 +31,56 @@ socket.on("roomFull", () => {
 
 socket.on("startRace", (data) => {
     pre_start.style.display = "none";
-    let words = data;
+    words = data;
     console.log(words);
-    text_area.innerHTML = words;
+    untyped.innerHTML = words;
+    raceFlag = true;
 })
 
 start_bt.addEventListener("click", () => {
     socket.emit("raceStarted");
 })
 
-if (race) {
-    //added keypress event - reference "https://www.section.io/engineering-education/keyboard-events-in-javascript/"
-    document.addEventListener('keypress', (event) => {
-        var name = event.key;
-        var code = event.code;
-        // Alert the key name and key code on keydown
-        console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
 
-    }, false);
+//added keypress event - reference "https://www.section.io/engineering-education/keyboard-events-in-javascript/"
+document.addEventListener('keypress', (e) => {
+    // var name = event.key;
+    // var code = event.code;
+    // // Alert the key name and key code on keydown
+    // console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
+    // let key = event.key;
+    if (raceFlag) {
+        changeCol(checkKey(e.key));
+    }
+}, false);
+
+
+function checkKey(key) {
+    if (index < words.length && key == words[index]) {
+        index++;
+        return true;
+    }
+    return false;
 }
 
+function changeCol(corr) {
+    if (corr) {
+        //turn green
+        typed_wr.innerHTML = "";
+        typed_corr.innerHTML += words[index - 1];
+        untyped.innerHTML = words.slice(index);
+
+
+    }
+    else {
+        //turn red
+        typed_wr.innerHTML = words[index];
+        untyped.innerHTML = words.slice(index + 1);
+
+
+    }
+
+}
 //use while loop to loop till the end of the string
 //use spans for color
 //use z-index for cursor
