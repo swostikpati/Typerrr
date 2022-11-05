@@ -26,3 +26,7 @@
 .end-screen {
     display: none;
 }
+
+.text-display {
+    z-index: -1;
+}
