@@ -49,6 +49,10 @@ socket.on("winners", (data) => {
     console.log(data);
 })
 
+socket.on("positionUpdate", (data) => {
+    console.log(data);
+})
+
 start_bt.addEventListener("click", () => {
     socket.emit("raceReady");
 })
@@ -69,9 +73,14 @@ document.addEventListener('keypress', (e) => {
 
 
 function checkKey(key) {
-    console.log(key + ", ", words[index]);
+    // console.log(key + ", ", words[index]);
     if (index < words.length && key == words[index]) {
         index++;
+        let indexData = {
+            username: userN,
+            posI: index
+        }
+        socket.emit("indexUpdate", indexData);
         return true;
     }
     return false;
@@ -109,3 +118,4 @@ function changeCol(corr) {
 //use while loop to loop till the end of the string
 //use spans for color
 //use z-index for cursor
+//everytime the index changes - emit to the server based on which current position will be known
