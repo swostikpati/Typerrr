@@ -1,9 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Comforter+Brush&family=Questrial&display=swap');
+
 .typed-corr {
     color: green;
+    /* background-color: blue; */
 }
 
 .typed-wr {
     color: red;
+    /* background-color: black; */
+}
+
+/* .untyped {
+    background-color: gray;
+} */
+
+.typed-corr,
+.typed-wr,
+.untyped {
+    letter-spacing: 1.5px;
+    font-size: 20px;
+    font-family: "Questrial";
 }
 
 .race-time,

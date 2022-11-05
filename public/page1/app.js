@@ -16,6 +16,7 @@ const typed_corr = document.querySelector(".typed-corr");
 const typed_wr = document.querySelector(".typed-wr");
 const end_screen = document.querySelector(".end-screen");
 const curr_pos = document.querySelector(".curr-pos");
+const waiting = document.querySelector(".waiting");
 const pos1 = document.querySelector(".pos1");
 const pos2 = document.querySelector(".pos2");
 const pos3 = document.querySelector(".pos3");
@@ -51,7 +52,7 @@ socket.on("startRace", (data) => {
 
 socket.on("winners", (data) => {
     console.log(data);
-    end_screen.innerHTML = 0;
+    waiting.innerHTML = 0;
     pos1.innerHTML += data[0];
     pos2.innerHTML += data[1];
     pos3.innerHTML += data[2];
@@ -78,7 +79,6 @@ document.addEventListener('keypress', (e) => {
     // console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
     // let key = event.key;
     if (raceFlag) {
-
         changeCol(checkKey(e.key));
     }
 }, false);
