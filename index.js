@@ -22,7 +22,9 @@ let tr = 0; //current room number
 let rooms = {};
 let newRoomFlag = true;
 
+
 io.sockets.on("connect", (socket) => {
+
     console.log("New connection:", socket.id);
 
     //checking disconnection of the specific socket
@@ -59,7 +61,7 @@ io.sockets.on("connect", (socket) => {
         tr++;
         socket.roomNo = tr;
         newRoomFlag = false;
-        rooms[tr] = { n: tr, f: true, cap: 1 };
+        rooms[tr] = { n: tr, f: true, cap: 1, winners: [] };
     }
     socket.join(socket.roomNo);
     if (rooms[socket.roomNo].cap > 3) {
@@ -68,14 +70,28 @@ io.sockets.on("connect", (socket) => {
     console.log("Room Capacity: ", rooms[socket.roomNo].cap);
     io.sockets.to(socket.roomNo).emit("roomData", socket.roomNo);
 
-    socket.on("raceStarted", () => {
+    socket.on("raceReady", () => {
         words = ""
         for (let i = 0; i < 20; i++) {
+            if (i == 19) {
+                words = words + wordsJSON.words[Math.floor(Math.random() * (1000)) + 1]; //without space in the end
+                break;
+            }
             words = words + wordsJSON.words[Math.floor(Math.random() * (1000)) + 1] + " ";
         }
         rooms[socket.roomNo].f = false;
         io.sockets.to(socket.roomNo).emit("startRace", words);
     })
+
+    socket.on("raceFinish", (data) => {
+        rooms[socket.roomNo].winners.push(data);
+        console.log(rooms[socket.roomNo].winners);
+        if (rooms[socket.roomNo].winners.length == 4) {
+            //rooms[socket.roomNo].f = true;
+            io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
+        }
+    })
+
 })
 
 

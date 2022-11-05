@@ -5,3 +5,8 @@
 .typed-wr {
     color: red;
 }
+
+.race-time,
+.end-screen {
+    display: none;
+}
