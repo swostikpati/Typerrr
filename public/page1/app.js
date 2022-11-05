@@ -15,6 +15,11 @@ const untyped = document.querySelector(".untyped");
 const typed_corr = document.querySelector(".typed-corr");
 const typed_wr = document.querySelector(".typed-wr");
 const end_screen = document.querySelector(".end-screen");
+const curr_pos = document.querySelector(".curr-pos");
+const pos1 = document.querySelector(".pos1");
+const pos2 = document.querySelector(".pos2");
+const pos3 = document.querySelector(".pos3");
+const pos4 = document.querySelector(".pos4");
 
 
 
@@ -45,12 +50,19 @@ socket.on("startRace", (data) => {
 })
 
 socket.on("winners", (data) => {
-
     console.log(data);
+    end_screen.innerHTML = 0;
+    pos1.innerHTML += data[0];
+    pos2.innerHTML += data[1];
+    pos3.innerHTML += data[2];
+    pos4.innerHTML += data[3];
+
 })
 
 socket.on("positionUpdate", (data) => {
     console.log(data);
+    curr_pos.innerText = `${data}/4`;
+
 })
 
 start_bt.addEventListener("click", () => {
@@ -70,6 +82,7 @@ document.addEventListener('keypress', (e) => {
         changeCol(checkKey(e.key));
     }
 }, false);
+
 
 
 function checkKey(key) {
@@ -119,3 +132,4 @@ function changeCol(corr) {
 //use spans for color
 //use z-index for cursor
 //everytime the index changes - emit to the server based on which current position will be known
+//add the check where one person leaves in the middle of the race...timeout
