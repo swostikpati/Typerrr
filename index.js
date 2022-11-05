@@ -61,7 +61,7 @@ io.sockets.on("connect", (socket) => {
         tr++;
         socket.roomNo = tr;
         newRoomFlag = false;
-        rooms[tr] = { n: tr, f: true, cap: 1, winners: [] };
+        rooms[tr] = { n: tr, f: true, cap: 1, winners: [], positions: {} };
     }
     socket.join(socket.roomNo);
     if (rooms[socket.roomNo].cap > 3) {
@@ -83,6 +83,18 @@ io.sockets.on("connect", (socket) => {
         io.sockets.to(socket.roomNo).emit("startRace", words);
     })
 
+    socket.on("indexUpdate", (data) => {
+        rooms[socket.roomNo].positions[data.username] = data.posI;
+        let count = 1;
+        for (let key in rooms[socket.roomNo].positions) {
+            if (key != data.username && rooms[socket.roomNo].positions[key] > rooms[socket.roomNo].positions[data.username]) {
+                count++;
+            }
+
+        }
+        io.sockets.to(socket.id).emit("positionUpdate", count);
+    })
+
     socket.on("raceFinish", (data) => {
         rooms[socket.roomNo].winners.push(data);
         console.log(rooms[socket.roomNo].winners);
@@ -91,6 +103,7 @@ io.sockets.on("connect", (socket) => {
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
         }
     })
+
 
 })
 
