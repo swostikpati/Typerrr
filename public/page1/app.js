@@ -104,7 +104,7 @@ function changeCol(corr) {
         //turn green
         typed_wr.innerHTML = "";
         typed_corr.innerHTML += words[index - 1];
-        untyped.innerHTML = words.slice(index);
+        untyped.innerHTML = "|" + words.slice(index);
         if (typed_corr.innerText == words) {
 
             console.log("race finished");
@@ -120,7 +120,7 @@ function changeCol(corr) {
 
         // else {
         //turn red
-        typed_wr.innerHTML = words[index];
+        typed_wr.innerHTML = "|" + words[index];
         untyped.innerHTML = words.slice(index + 1);
         // }
 
