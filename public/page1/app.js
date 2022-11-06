@@ -5,6 +5,7 @@ let raceFlag = false;
 let words;
 let index = 0;
 let userN;
+// let othersPosArr = [];
 
 //DOM elements
 const start_bt = document.querySelector("#start-bt");
@@ -61,8 +62,56 @@ socket.on("winners", (data) => {
 })
 
 socket.on("positionUpdate", (data) => {
-    console.log(data);
-    curr_pos.innerText = `${data}/4`;
+    console.log(data.racePos);
+    curr_pos.innerText = `${data.racePos}/4`;
+    // othersPosArr = data.othersPos;
+    // positionRefresh(othersPosArr);
+    data.othersPos.sort(function (a, b) { return a - b }); //the most important line to remember ever
+
+    let arrCorr = [];
+    let arrUn = [];
+    for (let i = 0; i < data.othersPos.length; i++) {
+        let othersPos = data.othersPos[i];
+
+        if (othersPos >= index && othersPos < words.length) {
+            //show in uptyped part
+            // untyped.innerHTML = untyped.innerHTML.slice(index, othersPos) + `<span class="cursor">|</span>` + untyped.innerHTML.slice(othersPos);
+            // untyped.innerHTML = words.slice(index, othersPos) + `<span class="cursor">|</span>` + words.slice(othersPos);
+            arrUn.push(othersPos);
+
+        }
+        else if (othersPos < index) {
+            arrCorr.push(othersPos);
+            //show in typed part
+            // typed_corr.innerHTML = typed_corr.innerHTML.slice(0, othersPos) + `<span class="cursor">|</span>` + typed_corr.innerHTML.slice(othersPos, index);
+            // typed_corr.innerHTML = words.slice(0, othersPos) + `<span class="cursor">|</span>` + words.slice(othersPos, index);
+        }
+        // untyped.innerHTML = words.slice(index, othersPos) + `<span class="cursor">|</span>` + words.slice(othersPos);
+        // arrCorr.sort();
+        // arrUn.sort();
+    }
+    console.log(arrCorr);
+    console.log(arrUn);
+    if (arrCorr[0]) {
+        typed_corr.innerHTML = words.slice(0, arrCorr[0]) + `<span class="cursor">|</span>`;
+        for (let i = 0; i < arrCorr.length - 1; i++) {
+            typed_corr.innerHTML += words.slice(arrCorr[i], arrCorr[i + 1]) + `<span class="cursor">|</span>`; //change 2
+        }
+        typed_corr.innerHTML += words.slice(arrCorr[arrCorr.length - 1], index);
+    }
+    else {
+        typed_corr.innerHTML = words.slice(0, index);
+    }
+
+    if (arrUn[0]) {
+        untyped.innerHTML = `<span class="cursor">|</span>` + words.slice(index, arrUn[0]);
+        for (let i = 0; i < arrUn.length - 1; i++) {
+            untyped.innerHTML += `<span class="cursor">|</span>` + words.slice(arrUn[i], arrUn[i + 1]);
+
+        }
+        untyped.innerHTML += `<span class="cursor">|</span>` + words.slice(arrUn[arrUn.length - 1]); //last change
+    }
+
 
 })
 
@@ -110,7 +159,9 @@ function changeCol(corr) {
         typed_wr.innerHTML = "";
         typed_corr.innerHTML += words[index - 1];
         untyped.innerHTML = `<span class="cursor">|</span>` + words.slice(index);
-        if (typed_corr.innerText == words) {
+        //positionRefresh(othersPosArr);
+        //typed_corr.innerText == words
+        if (index == words.length) {
 
             console.log("race finished");
             raceFlag = false;
@@ -127,12 +178,61 @@ function changeCol(corr) {
         //turn red
         typed_wr.innerHTML = `<span class="cursor">|</span>` + words[index];
         untyped.innerHTML = words.slice(index + 1);
+        //positionRefresh(othersPosArr);
         // }
 
 
     }
 
 }
+
+
+// function positionRefresh(othersPos) {
+//     othersPos.sort();
+
+//     let i = 0;
+//     let prevI = 0;
+//     if (othersPos[i] < index) {
+//         typed_corr.innerHTML = "";
+//     }
+//     else {
+//         typed_corr.innerHTML = words.slice(0, index);
+//     }
+//     while (othersPos[i] < index) {
+//         typed_corr.innerHTML += words.slice(prevI, othersPos[i]) + `<span class="cursor">|</span>`;
+//         prevI = othersPos[i];
+//         i++;
+//         if (othersPos[i] >= index) {
+//             typed_corr.innerHTML += words.slice(prevI, index);
+//             prevI = index;
+//         }
+//     }
+
+//     if (i < othersPos.length) {
+//         // if (typed_wr.innerHTML == "") {
+//         //     untyped.innerHTML = `<span class="cursor">|</span>`;
+//         // }
+//         // else {
+//         //     untyped.innerHTML = "";
+//         // }
+//         untyped.innerHTML = "";
+//     }
+//     else {
+//         untyped.innerHTML = words.slice(index);
+//     }
+
+//     while (i < othersPos.length) {
+//         //add if check for wrong scenario
+//         untyped.innerHTML += words.slice(index, othersPos[i]) + `<span class="cursor">|</span>`;
+//         prevI = othersPos[i];
+//         i++;
+//         if (i >= othersPos.length) {
+//             untyped.innerHTML += words.slice(prevI);
+//         }
+//     }
+
+//     // }
+// }
 //use while loop to loop till the end of the string
 //use spans for color
 //use z-index for cursor
@@ -142,3 +242,4 @@ function changeCol(corr) {
 //if someone exits before start...disable start
 
 //one way that might work is to give a class to the cursor specifically and animating it in css
+//fix the case where all four are activated

@@ -94,13 +94,22 @@ io.sockets.on("connect", (socket) => {
     socket.on("indexUpdate", (data) => {
         rooms[socket.roomNo].positions[data.username] = data.posI;
         let count = 1;
+        let others = []
         for (let key in rooms[socket.roomNo].positions) {
             if (key != data.username && rooms[socket.roomNo].positions[key] > rooms[socket.roomNo].positions[data.username]) {
                 count++;
+
+            }
+            if (key != data.username) {
+                others.push(rooms[socket.roomNo].positions[key]);
             }
 
         }
-        io.sockets.to(socket.id).emit("positionUpdate", count);
+        let positionUpdateData = {
+            racePos: count,
+            othersPos: others
+        }
+        io.sockets.to(socket.id).emit("positionUpdate", positionUpdateData);
     })
 
     socket.on("raceFinish", (data) => {
