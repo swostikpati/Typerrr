@@ -104,7 +104,7 @@ function changeCol(corr) {
         //turn green
         typed_wr.innerHTML = "";
         typed_corr.innerHTML += words[index - 1];
-        untyped.innerHTML = "|" + words.slice(index);
+        untyped.innerHTML = `<span class="cursor">|</span>` + words.slice(index);
         if (typed_corr.innerText == words) {
 
             console.log("race finished");
@@ -120,7 +120,7 @@ function changeCol(corr) {
 
         // else {
         //turn red
-        typed_wr.innerHTML = "|" + words[index];
+        typed_wr.innerHTML = `<span class="cursor">|</span>` + words[index];
         untyped.innerHTML = words.slice(index + 1);
         // }
 
@@ -135,3 +135,5 @@ function changeCol(corr) {
 //add the check where one person leaves in the middle of the race...timeout
 
 //if someone exits before start...disable start
+
+//one way that might work is to give a class to the cursor specifically and animating it in css
