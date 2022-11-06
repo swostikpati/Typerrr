@@ -33,6 +33,10 @@ io.sockets.on("connect", (socket) => {
         console.log("Room: ", socket.roomNo);
         rooms[socket.roomNo].cap--;
         console.log("Room Capacity: ", rooms[socket.roomNo].cap);
+        if (rooms[socket.roomNo].f) {
+            console.log("yes buddy");
+            io.sockets.to(rooms[socket.roomNo].n).emit("playerDropped");
+        }
     })
 
     for (let i = 1; i <= tr; i++) {

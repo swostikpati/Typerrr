@@ -66,6 +66,11 @@ socket.on("positionUpdate", (data) => {
 
 })
 
+socket.on("playerDropped", () => {
+    console.log("yes1");
+    start_bt.disabled = true;
+})
+
 start_bt.addEventListener("click", () => {
     socket.emit("raceReady");
 })
