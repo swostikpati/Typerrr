@@ -98,7 +98,7 @@ io.sockets.on("connect", (socket) => {
     socket.on("raceFinish", (data) => {
         rooms[socket.roomNo].winners.push(data);
         console.log(rooms[socket.roomNo].winners);
-        if (rooms[socket.roomNo].winners.length == 4) {
+        if (rooms[socket.roomNo].winners.length >= rooms[socket.roomNo].cap) {
             //rooms[socket.roomNo].f = true;
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
         }

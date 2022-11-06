@@ -52,7 +52,7 @@ socket.on("startRace", (data) => {
 
 socket.on("winners", (data) => {
     console.log(data);
-    waiting.innerHTML = 0;
+    waiting.innerHTML = "";
     pos1.innerHTML += data[0];
     pos2.innerHTML += data[1];
     pos3.innerHTML += data[2];
