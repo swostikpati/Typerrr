@@ -37,6 +37,10 @@ io.sockets.on("connect", (socket) => {
             console.log("yes buddy");
             io.sockets.to(rooms[socket.roomNo].n).emit("playerDropped");
         }
+        if (rooms[socket.roomNo].winners.length >= rooms[socket.roomNo].cap) {
+            //rooms[socket.roomNo].f = true;
+            io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
+        }
     })
 
     for (let i = 1; i <= tr; i++) {
