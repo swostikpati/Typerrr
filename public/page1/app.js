@@ -46,7 +46,7 @@ socket.on("startRace", (data) => {
     race_time.style.display = "block";
     words = data;
     console.log(words);
-    untyped.innerHTML = words;
+    untyped.innerHTML += words;
     raceFlag = true;
 })
 
