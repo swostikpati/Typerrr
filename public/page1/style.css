@@ -31,10 +31,14 @@
     z-index: -1;
 }
 
+.cursor1 {
+    color: gray;
+}
 
 /* cursor animation ref: https: //www.w3docs.com/snippets/css/how-to-create-a-blinking-effect-with-css3-animations.html */
 
-.cursor {
+.cursor,
+.cursor1 {
     animation: blink-animation 1s steps(5, start) infinite;
     -webkit-animation: blink-animation 1s steps(5, start) infinite;
 }

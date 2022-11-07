@@ -93,9 +93,9 @@ socket.on("positionUpdate", (data) => {
     console.log(arrCorr);
     console.log(arrUn);
     if (arrCorr[0]) {
-        typed_corr.innerHTML = words.slice(0, arrCorr[0]) + `<span class="cursor">|</span>`;
+        typed_corr.innerHTML = words.slice(0, arrCorr[0]) + `<span class="cursor1">|</span>`;
         for (let i = 0; i < arrCorr.length - 1; i++) {
-            typed_corr.innerHTML += words.slice(arrCorr[i], arrCorr[i + 1]) + `<span class="cursor">|</span>`; //change 2
+            typed_corr.innerHTML += words.slice(arrCorr[i], arrCorr[i + 1]) + `<span class="cursor1">|</span>`; //change 2
         }
         typed_corr.innerHTML += words.slice(arrCorr[arrCorr.length - 1], index);
     }
@@ -106,10 +106,10 @@ socket.on("positionUpdate", (data) => {
     if (arrUn[0]) {
         untyped.innerHTML = `<span class="cursor">|</span>` + words.slice(index, arrUn[0]);
         for (let i = 0; i < arrUn.length - 1; i++) {
-            untyped.innerHTML += `<span class="cursor">|</span>` + words.slice(arrUn[i], arrUn[i + 1]);
+            untyped.innerHTML += `<span class="cursor1">|</span>` + words.slice(arrUn[i], arrUn[i + 1]);
 
         }
-        untyped.innerHTML += `<span class="cursor">|</span>` + words.slice(arrUn[arrUn.length - 1]); //last change
+        untyped.innerHTML += `<span class="cursor1">|</span>` + words.slice(arrUn[arrUn.length - 1]); //last change
     }
 
 
