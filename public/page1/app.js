@@ -22,6 +22,7 @@ const pos1 = document.querySelector(".pos1");
 const pos2 = document.querySelector(".pos2");
 const pos3 = document.querySelector(".pos3");
 const pos4 = document.querySelector(".pos4");
+const restart_bt = document.querySelector("#restart-bt");
 
 
 
@@ -137,6 +138,9 @@ document.addEventListener('keypress', (e) => {
     }
 }, false);
 
+// restart_bt.addEventListener("click", () => {
+//     //socket.emit("raceOver")
+// })
 
 
 function checkKey(key) {
