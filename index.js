@@ -116,7 +116,7 @@ io.sockets.on("connect", (socket) => {
         rooms[socket.roomNo].winners.push(data);
         console.log(rooms[socket.roomNo].winners);
         if (rooms[socket.roomNo].winners.length >= rooms[socket.roomNo].cap) {
-            //rooms[socket.roomNo].f = true;
+            rooms[socket.roomNo].f = true; //changed
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
         }
     })
