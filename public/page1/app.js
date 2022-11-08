@@ -4,7 +4,10 @@ let socket = io(); //establishes connection with the socket server
 let raceFlag = false;
 let words;
 let index = 0;
-let userN;
+let userN = "";
+let userP = "";
+// let userAuthFlag = true;
+let userAuthData;
 // let othersPosArr = [];
 
 //DOM elements
@@ -24,9 +27,8 @@ const pos3 = document.querySelector(".pos3");
 const pos4 = document.querySelector(".pos4");
 const restart_bt = document.querySelector("#restart-bt");
 
+userAuthCheck();
 
-
-userN = prompt("Please enter your username:");
 
 //client acknowledging after server confirmation - connect is a keyword
 socket.on("connect", () => {
@@ -34,6 +36,22 @@ socket.on("connect", () => {
     socket.on("roomData", (data) => {
         console.log("Room joined:", data);
     })
+
+})
+
+socket.on("loginStatus", (data) => {
+    if (data == "success") {
+        alert("Logged in successfully!");
+    }
+    if (data == "failed") {
+        alert("Login Failed! Username already exists or Password Error.")
+        userN = "";
+        userP = "";
+        userAuthCheck();
+    }
+    if (data == "successCreated") {
+        alert("New user profile created and logged in successfully!");
+    }
 
 })
 
@@ -121,6 +139,7 @@ socket.on("playerDropped", () => {
     start_bt.disabled = true;
 })
 
+
 start_bt.addEventListener("click", () => {
     socket.emit("raceReady");
 })
@@ -190,6 +209,23 @@ function changeCol(corr) {
 
 }
 
+function userAuthCheck() {
+    while (userN == "" || userN == null) {
+        userN = prompt("Please enter your username:");
+        console.log(userN);
+    }
+    while (userP == "" || userP == null) {
+        userP = prompt("Please enter your password:");
+    }
+
+
+    userAuthData = {
+        username: userN,
+        pass: userP
+    }
+
+    socket.emit("userAuth", userAuthData);
+}
 
 // function positionRefresh(othersPos) {
 //     othersPos.sort();
@@ -247,3 +283,9 @@ function changeCol(corr) {
 
 //one way that might work is to give a class to the cursor specifically and animating it in css
 //fix the case where all four are activated
+
+//user authentication
+//database for highscores and user profiles
+//styling
+//going back to the main page
+//add wpm
