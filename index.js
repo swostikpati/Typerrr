@@ -71,6 +71,14 @@ io.sockets.on("connect", (socket) => {
             rooms[socket.roomNo].f = true; //changed
             updateHighscoreDB(rooms[socket.roomNo].winners[0]);
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
+            highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
+                // console.log(docs);//all docs
+                if (err) {
+                    res.send({ "task": "unsuccessful" })
+                } else {
+                    io.sockets.emit("updateHighscores", { "highscores": docs });
+                }
+            });
         }
     })
 
@@ -275,12 +283,25 @@ io.sockets.on("connect", (socket) => {
             rooms[socket.roomNo].f = true; //changed
             updateHighscoreDB(rooms[socket.roomNo].winners[0]);
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
+
+            highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
+                // console.log(docs);//all docs
+                if (err) {
+                    res.send({ "task": "unsuccessful" })
+                } else {
+                    io.sockets.emit("updateHighscores", { "highscores": docs });
+                }
+            });
         }
     })
 
 
 })
 
+
+// app.get("/highscores", (req, res) => {
+
+// })
 
 function updateHighscoreDB(winner) {
 

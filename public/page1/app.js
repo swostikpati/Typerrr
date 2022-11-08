@@ -30,6 +30,7 @@ const pos3 = document.querySelector(".pos3");
 const pos4 = document.querySelector(".pos4");
 const restart_bt = document.querySelector("#restart-bt");
 const wpm = document.querySelector(".wpm");
+const highscore_sec = document.querySelector(".highscore-sec");
 
 userAuthCheck();
 
@@ -143,6 +144,15 @@ socket.on("playerDropped", () => {
     start_bt.disabled = true;
 })
 
+socket.on("updateHighscores", (data) => {
+    let allHighscores = data.highscores;
+    let i = 0;
+    highscore_sec.innerHTML = "";
+    while (i < allHighscores.length && i < 5) {
+        highscore_sec.innerHTML += `<p class="highscore-rec">${allHighscores[i].username} : ${allHighscores[i].highscore}</p>`;
+        i++;
+    }
+})
 
 start_bt.addEventListener("click", () => {
     socket.emit("raceReady");
@@ -247,6 +257,43 @@ function calculateWPM() {
     let ans = (5 * 1000 * 60) / time;
     return ans;
 }
+
+// function refreshHighscores() {
+//     //GET request from the API
+//     fetch("/highscores")
+//         .then(res => res.json())
+//         .then(data => {
+//             let allHighscores = data.highscores;
+//             let i = 0;
+//             while (i < allHighscores.length && i < 10) {
+//                 highscore_sec.innerHTML += `<p class="highscore-rec">${allHighscores[i].username} : ${allHighscores[i].highscore}</p>`;
+//                 i++;
+//             }
+
+
+//             // allChats.forEach((chat) => {
+//             //     chatMsgs.innerHTML += `<li>${chat.name} - ${chat.msg}</li>`
+//             // })
+//             //clear out the HTML div that contains all the messages
+//             //add all the new messages that we have
+//         })
+// }
+// app.get("/messages", (req, res) => {
+//     db.find({}).sort({ createdAt: 1 }).exec((err, docs) => {
+//         // console.log(docs);//all docs
+//         if (err) {
+//             res.send({ "task": "unsuccessful" })
+//         } else {
+//             res.json({
+//                 "msgs": docs
+//             })
+//         }
+
+//     });
+//     // res.json({
+//     //     "msgs": messages
+//     // })
+// })
 // function positionRefresh(othersPos) {
 //     othersPos.sort();
 
