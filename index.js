@@ -1,8 +1,12 @@
 let express = require("express");
 let wordsJSON = require("./words1k.json");
+let bcrypt = require("bcrypt");
+
 let app = express();
 app.use(express.json());
 const PORT = 3000;
+const users = [];
+const saltRounds = 10;
 
 let http = require("http");
 let server = http.createServer(app);
@@ -12,6 +16,32 @@ server.listen(PORT, () => {
 })
 
 app.use("/", express.static("public/page1"))
+
+let datastore = require("nedb");
+let highScoreDB = new datastore({ filename: "highscores.db", timestampData: true });
+let usersDB = new datastore({ filename: "userAuth.db", timestampData: false });
+
+highScoreDB.loadDatabase();
+usersDB.loadDatabase();
+// app.get("/users", (req, res) => {
+//     res.json(users);
+// })
+
+// app.post("users/login", async (req, res) => {
+//     const user = users.find(user => user.userN === req.body.userN)
+//     if (user == null) {
+//         return res.status(400).send('Cannot find user')
+//     }
+//     try {
+//         if (await bcrypt.compare(req.body.password, user.password)) {
+//             res.send('Success')
+//         } else {
+//             res.send('Not Allowed')
+//         }
+//     } catch {
+//         res.status(500).send()
+//     }
+// })
 
 let io = require("socket.io");
 io = new io.Server(server);
@@ -42,6 +72,123 @@ io.sockets.on("connect", (socket) => {
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
         }
     })
+
+    socket.on("userAuth", (data) => {
+        socket.userN = data.username;
+        let pswdH;
+        let userExistsFlag = false;
+        let loginStatusData;
+
+
+        usersDB.find({ username: data.username }, (err, docs) => {
+            if (err) {
+                console.log("Error", err);
+                userExistsFlag = false;
+
+            }
+            else {
+
+                console.log("Docs:", docs);
+                if (docs.length > 0) {
+                    console.log("entered docs");
+                    pswdH = docs[0].password;
+                    userExistsFlag = true;
+                }
+                else {
+                    console.log("entered here")
+                    userExistsFlag = false;
+                }
+            }
+            console.log(userExistsFlag);
+
+            if (userExistsFlag) {
+                console.log("user exists");
+                bcrypt.compare(data.pass, pswdH, (err, result) => {
+                    if (err) {
+                        console.log("Error line 189: ", err);
+                    }
+                    // result == true
+                    else {
+                        if (result) {
+                            console.log("successful login");
+                            loginStatusData = "success";
+                            io.sockets.to(socket.id).emit("loginStatus", loginStatusData);
+                            //emit a msg back to the specific client that their login was successful
+                        }
+                        else {
+                            console.log("unsuccessful login");
+                            loginStatusData = "failed";
+                            io.sockets.to(socket.id).emit("loginStatus", loginStatusData);
+                            //emit a msg back to the specific client that their login failed and ask them to login again (keep prompting them)
+                            //the reason their login failed could be that their username exists already or their password is wrong
+                        }
+                    }
+                });
+            }
+            else {
+                bcrypt.hash(data.pass, saltRounds, (err, hash) => {
+                    // Store hash in your password DB.
+                    if (err) {
+                        console.log("Error line 206: ", err);
+                    }
+                    usersDB.insert({ username: data.username, password: hash }, (err, newDoc) => {
+                        if (err) {
+                            console.log("Error line 210:", err);
+                        }
+                        else {
+                            console.log("New user profile created successfully");
+                            loginStatusData = "successCreated";
+                            io.sockets.to(socket.id).emit("loginStatus", loginStatusData);
+                            //emit a msg saying that their user profile is created and they are logged in succesfully (as an alert)
+                        }
+
+                    })
+
+                });
+            }
+
+        })
+        // console.log(userExistsFlag);
+
+        // if (userExistsFlag) {
+        //     console.log("user exists");
+        //     bcrypt.compare(data.pass, pswdH, (err, result) => {
+        //         if (err) {
+        //             console.log("Error: ", err);
+        //         }
+        //         // result == true
+        //         else {
+        //             if (result) {
+        //                 console.log("successful login");
+        //             }
+        //             else {
+        //                 console.log("unsuccessful login");
+        //             }
+        //         }
+        //     });
+        // }
+        // else {
+        //     bcrypt.hash(data.pass, saltRounds, (err, hash) => {
+        //         // Store hash in your password DB.
+        //         if (err) {
+        //             console.log("Error: ", err);
+        //         }
+        //         usersDB.insert({ username: data.username, password: hash }, (err, newDoc) => {
+        //             if (err) {
+        //                 console.log("Error:", err);
+        //             }
+        //             else {
+        //                 console.log("New user profile created successfully");
+        //             }
+
+        //         })
+
+        //     });
+        // }
+
+    })
+
+    //reference: https://sebhastian.com/javascript-wait-for-function-to-finish/
 
     for (let i = 1; i <= tr; i++) {
         if (rooms[i].cap < 4 && rooms[i].f) {
@@ -125,7 +272,3 @@ io.sockets.on("connect", (socket) => {
 })
 
 
-let datastore = require("nedb");
-let db = new datastore({ filename: "highscores.db", timestampData: true });
-
-db.loadDatabase();
