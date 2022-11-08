@@ -18,7 +18,7 @@ server.listen(PORT, () => {
 app.use("/", express.static("public/page1"))
 
 let datastore = require("nedb");
-let highScoreDB = new datastore({ filename: "highscores.db", timestampData: true });
+let highScoreDB = new datastore({ filename: "highscores.db", timestampData: false });
 let usersDB = new datastore({ filename: "userAuth.db", timestampData: false });
 
 highScoreDB.loadDatabase();
@@ -68,7 +68,8 @@ io.sockets.on("connect", (socket) => {
             io.sockets.to(rooms[socket.roomNo].n).emit("playerDropped");
         }
         if (rooms[socket.roomNo].winners.length >= rooms[socket.roomNo].cap) {
-            //rooms[socket.roomNo].f = true;
+            rooms[socket.roomNo].f = true; //changed
+            updateHighscoreDB(rooms[socket.roomNo].winners[0]);
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
         }
     })
@@ -138,6 +139,14 @@ io.sockets.on("connect", (socket) => {
                         else {
                             console.log("New user profile created successfully");
                             loginStatusData = "successCreated";
+                            highScoreDB.insert({ username: data.username, highscore: 0 }, (err, docs) => {
+                                if (err) {
+                                    console.log("Error", err);
+                                }
+                                else {
+                                    console.log("Profile created in highscore db");
+                                }
+                            })
                             io.sockets.to(socket.id).emit("loginStatus", loginStatusData);
                             //emit a msg saying that their user profile is created and they are logged in succesfully (as an alert)
                         }
@@ -264,6 +273,7 @@ io.sockets.on("connect", (socket) => {
         console.log(rooms[socket.roomNo].winners);
         if (rooms[socket.roomNo].winners.length >= rooms[socket.roomNo].cap) {
             rooms[socket.roomNo].f = true; //changed
+            updateHighscoreDB(rooms[socket.roomNo].winners[0]);
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
         }
     })
@@ -272,3 +282,24 @@ io.sockets.on("connect", (socket) => {
 })
 
 
+function updateHighscoreDB(winner) {
+
+    highScoreDB.find({ username: winner }, (err, docs) => {
+        let prevScore;
+        if (err) {
+            console.log("Error:", err);
+        }
+        else {
+            prevScore = docs[0].highscore;
+            console.log(prevScore);
+        }
+        highScoreDB.update({ highscore: prevScore }, { $set: { highscore: prevScore + 1 } }, { upsert: false }, (err, numReplaced) => {
+            // numReplaced = 3
+            // Field 'system' on Mars, Earth, Jupiter now has value 'solar system'
+            if (err) {
+                console.log("Error:", err);
+            }
+        });
+    })
+
+}
