@@ -6,6 +6,9 @@ let words;
 let index = 0;
 let userN = "";
 let userP = "";
+let start;
+let end;
+let firstKeyFlag = true;
 // let userAuthFlag = true;
 let userAuthData;
 // let othersPosArr = [];
@@ -26,6 +29,7 @@ const pos2 = document.querySelector(".pos2");
 const pos3 = document.querySelector(".pos3");
 const pos4 = document.querySelector(".pos4");
 const restart_bt = document.querySelector("#restart-bt");
+const wpm = document.querySelector(".wpm");
 
 userAuthCheck();
 
@@ -153,7 +157,17 @@ document.addEventListener('keypress', (e) => {
     // console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
     // let key = event.key;
     if (raceFlag) {
+        // if (firstKeyFlag) {
+        //     start = new Date().getTime();
+        //     firstKeyFlag = false;
+        // }
+        // if (e.key == " " && checkKey(e.key)) {
+        //     end = new Date().getTime();
+        //     wpm.innerHTML = `${calculateWPM()} WPM`;
+        //     start = new Date().getTime();
+        // }
         changeCol(checkKey(e.key));
+
     }
 }, false);
 
@@ -227,6 +241,12 @@ function userAuthCheck() {
     socket.emit("userAuth", userAuthData);
 }
 
+function calculateWPM() {
+    let time = (end - start);
+    console.log(time);
+    let ans = (5 * 1000 * 60) / time;
+    return ans;
+}
 // function positionRefresh(othersPos) {
 //     othersPos.sort();
 
