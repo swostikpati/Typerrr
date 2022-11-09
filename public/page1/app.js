@@ -31,6 +31,10 @@ const pos4 = document.querySelector(".pos4");
 const restart_bt = document.querySelector("#restart-bt");
 const wpm = document.querySelector(".wpm");
 const highscore_sec = document.querySelector(".highscore-sec");
+const room_status = document.querySelector(".room-status");
+const container1_txt = document.querySelector(".container1-txt");
+const navbar = document.querySelector("#heading1");
+const leaderboard = document.querySelector(".leaderboard");
 
 userAuthCheck();
 
@@ -64,11 +68,14 @@ socket.on("roomFull", () => {
     // roomFull = data;
     console.log("yes");
     start_bt.disabled = false;
+    container1_txt.innerHTML = "Players Ready";
 })
 
 socket.on("startRace", (data) => {
+    leaderboard.style.display = "none";
+    navbar.style.display = "none";
     pre_start.style.display = "none";
-    race_time.style.display = "block";
+    race_time.style.display = "flex";
     words = data;
     console.log(words);
     untyped.innerHTML += words;
@@ -149,9 +156,14 @@ socket.on("updateHighscores", (data) => {
     let i = 0;
     highscore_sec.innerHTML = "";
     while (i < allHighscores.length && i < 5) {
-        highscore_sec.innerHTML += `<p class="highscore-rec">${allHighscores[i].username} : ${allHighscores[i].highscore}</p>`;
+        highscore_sec.innerHTML += `<div class="highscore-rec">${allHighscores[i].username} : ${allHighscores[i].highscore}</div>`;
         i++;
     }
+})
+
+
+socket.on("liveRoomStatus", (data) => {
+    room_status.innerHTML = `${data}/4`
 })
 
 start_bt.addEventListener("click", () => {
@@ -213,7 +225,10 @@ function changeCol(corr) {
             console.log("race finished");
             raceFlag = false;
             race_time.style.display = "none";
-            end_screen.style.display = "block";
+            navbar.style.display = "flex";
+            leaderboard.style.display = "block";
+            end_screen.style.display = "flex";
+
             socket.emit("raceFinish", userN);
         }
 

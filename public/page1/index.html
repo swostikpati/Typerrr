@@ -5,20 +5,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Typerrr.com</title>
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 
 </head>
 
 <body>
+    <header class="header" id="heading1">
+        <!-- Logo -->
+        <a href="./index.html" id="logo"><img src="./assets//typerrr_logo.png" alt="logo"></a>
+        <nav>
+            <ul class="nav_links">
+                <!-- Linking Navbar options to different sections of the website -->
+                <li><a href="">Help</a></li>
+                <li><a href="#lb_heading">Leaderboard</a></li>
+            </ul>
+        </nav>
+    </header>
     <section class="pre-start">
-        <button id="start-bt" disabled>Start Race</button>
+        <div class="container1">
+            <div class="room-status">1/4</div>
+            <p class="container1-txt">Waiting for players to join...</p>
+            <button id="start-bt" disabled>Start Race</button>
+        </div>
+        <p class="quote">"Beat cursors to the finish line!"</p>
     </section>
     <section class="race-time">
+        <!-- <p class="curr-pos">1/4</p> -->
+        <!-- <p class="wpm">0 WPM</p> -->
         <div class="text-display">
             <p class="curr-pos">1/4</p>
-            <p class="wpm">0 WPM</p>
             <p class="text-area">
                 <span class="typed-corr"></span>
                 <!-- <span>|</span> -->
@@ -34,13 +51,27 @@
     </section>
     <section class="end-screen">
         <p class="waiting">Waiting for results...</p>
-        <div class="pos1">First Position: </div>
-        <div class="pos2">Second Position: </div>
-        <div class="pos3">Third Position: </div>
-        <div class="pos4">Fourth Position: </div>
+        <div>
+            <!-- put img -->
+            <div class="pos1">First Position: </div>
+        </div>
+        <div class="other-pos">
+            <!-- inside each div have a picture and a para -->
+            <div class="pos2">Second Position: </div>
+            <div class="pos3">Third Position: </div>
+            <div class="pos4">Fourth Position: </div>
+        </div>
+
         <!-- <button id="restart-bt">Race Again</button> -->
-        <section class="highscore-sec"></section>
+
     </section>
+    <section class="leaderboard">
+        <p id="lb_heading">Leaderboard</p>
+        <div class="highscore-sec">
+
+        </div>
+    </section>
+    <section class="help"></section>
 
 
     <script src="app.js"></script>

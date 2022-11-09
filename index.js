@@ -66,19 +66,23 @@ io.sockets.on("connect", (socket) => {
         if (rooms[socket.roomNo].f) {
             console.log("yes buddy");
             io.sockets.to(rooms[socket.roomNo].n).emit("playerDropped");
+            io.sockets.to(socket.roomNo).emit("liveRoomStatus", rooms[socket.roomNo].cap);
         }
         if (rooms[socket.roomNo].winners.length >= rooms[socket.roomNo].cap) {
             rooms[socket.roomNo].f = true; //changed
-            updateHighscoreDB(rooms[socket.roomNo].winners[0]);
+            if (rooms[socket.roomNo].winners.length > 0) {
+                updateHighscoreDB(rooms[socket.roomNo].winners[0]);
+            }
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
-            highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
-                // console.log(docs);//all docs
-                if (err) {
-                    res.send({ "task": "unsuccessful" })
-                } else {
-                    io.sockets.emit("updateHighscores", { "highscores": docs });
-                }
-            });
+            refreshLeaderboard();
+            // highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
+            //     // console.log(docs);//all docs
+            //     if (err) {
+            //         res.send({ "task": "unsuccessful" })
+            //     } else {
+            //         io.sockets.emit("updateHighscores", { "highscores": docs });
+            //     }
+            // });
         }
     })
 
@@ -204,6 +208,7 @@ io.sockets.on("connect", (socket) => {
         // }
 
     })
+    refreshLeaderboard();
 
     //reference: https://sebhastian.com/javascript-wait-for-function-to-finish/
 
@@ -236,6 +241,7 @@ io.sockets.on("connect", (socket) => {
         rooms[tr] = { n: tr, f: true, cap: 1, winners: [], positions: {} };
     }
     socket.join(socket.roomNo);
+    io.sockets.to(socket.roomNo).emit("liveRoomStatus", rooms[socket.roomNo].cap);
     if (rooms[socket.roomNo].cap > 3) {
         io.sockets.to(socket.roomNo).emit("roomFull");
     }
@@ -283,15 +289,15 @@ io.sockets.on("connect", (socket) => {
             rooms[socket.roomNo].f = true; //changed
             updateHighscoreDB(rooms[socket.roomNo].winners[0]);
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
-
-            highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
-                // console.log(docs);//all docs
-                if (err) {
-                    res.send({ "task": "unsuccessful" })
-                } else {
-                    io.sockets.emit("updateHighscores", { "highscores": docs });
-                }
-            });
+            refreshLeaderboard();
+            // highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
+            //     // console.log(docs);//all docs
+            //     if (err) {
+            //         res.send({ "task": "unsuccessful" })
+            //     } else {
+            //         io.sockets.emit("updateHighscores", { "highscores": docs });
+            //     }
+            // });
         }
     })
 
@@ -323,4 +329,15 @@ function updateHighscoreDB(winner) {
         });
     })
 
+}
+
+function refreshLeaderboard() {
+    highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
+        // console.log(docs);//all docs
+        if (err) {
+            res.send({ "task": "unsuccessful" })
+        } else {
+            io.sockets.emit("updateHighscores", { "highscores": docs });
+        }
+    });
 }
