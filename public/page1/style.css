@@ -1,11 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Comforter+Brush&family=Questrial&display=swap');
 
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 .text-area {
+    /* to remove space between padding */
     font-size: 0px;
 }
 
 .typed-corr {
-    color: green;
+    color: #00ce7c;
     /* background-color: blue; */
 }
 
@@ -14,29 +24,36 @@
     /* background-color: black; */
 }
 
-/* .untyped {
-    background-color: gray;
-} */
+.untyped {
+    color: #9578D3;
+}
 
 .typed-corr,
 .typed-wr,
 .untyped {
     letter-spacing: 1.5px;
-    font-size: 20px;
+    font-size: 35px;
     font-family: "Questrial";
+
 }
+
+
 
 .race-time,
 .end-screen {
     display: none;
 }
 
-.text-display {
+/* .text-display {
     z-index: -1;
+} */
+.cursor {
+    color: #00ce7c;
+    font-size: 40px;
 }
 
 .cursor1 {
-    color: gray;
+    color: #9578d3b6;
 }
 
 /* cursor animation ref: https: //www.w3docs.com/snippets/css/how-to-create-a-blinking-effect-with-css3-animations.html */
@@ -44,7 +61,7 @@
 .cursor,
 .cursor1 {
     animation: blink-animation 1s steps(5, start) infinite;
-    -webkit-animation: blink-animation 1s steps(5, start) infinite;
+    /* -webkit-animation: blink-animation 1s steps(5, start) infinite; */
 }
 
 
@@ -54,8 +71,189 @@
     }
 }
 
-@-webkit-keyframes blink-animation {
+/* @-webkit-keyframes blink-animation {
     to {
         visibility: hidden;
     }
+} */
+
+body {
+    background-color: #181C18;
+}
+
+.race-time {
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styling the Navbar */
+#logo {
+    cursor: pointer;
+    padding: 0;
+}
+
+#logo img {
+    width: 20%;
+    height: 20%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 5%;
+    height: auto;
+}
+
+.nav_links li {
+    display: inline-block;
+    transition: scale 0.3s;
+}
+
+.nav_links li a {
+
+    font-family: "Questrial";
+    font-weight: 500;
+    font-size: 40px;
+    color: #9578D3;
+    text-decoration: none;
+    letter-spacing: 1.5px;
+
+    padding-left: 30px;
+    transition: color 0.7s;
+}
+
+
+.nav_links li:hover {
+    scale: 1.08;
+    cursor: default;
+}
+
+.nav_links li a:hover {
+    color: #00ce7c;
+}
+
+.container1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 40px;
+    color: #9578D3;
+}
+
+.container1 p,
+.waiting {
+    margin-bottom: 30px;
+    font-family: "Questrial";
+    font-size: 50px;
+}
+
+.container1 div {
+    text-align: center;
+    margin-bottom: 35px;
+    font-family: "Questrial";
+    font-size: 55px;
+    border: 2px dotted #00ce7c;
+    padding: 10px;
+
+}
+
+#start-bt {
+    padding: 15px 25px;
+    margin: 40px;
+    border-radius: 10px;
+    background-color: #9578D3;
+    color: #00ce7c;
+    font-size: 40px;
+    font-family: 'Questrial';
+}
+
+#start-bt:disabled {
+    display: none;
+}
+
+#start-bt:hover {
+    scale: 1.08;
+    cursor: pointer;
+    background-color: #00ce7c;
+    color: #9578D3;
+
+}
+
+.quote {
+    margin-top: 50px;
+    color: #00ce7c;
+    font-family: "Questrial";
+    font-size: 40px;
+    text-align: center;
+
+}
+
+.pre-start {
+    height: 100vh;
+}
+
+/* second page */
+.text-display {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    margin: 250px 150px;
+}
+
+.curr-pos {
+    /* color: #00ce7c; */
+    font-family: "Questrial";
+    font-size: 35px;
+    padding: 10px;
+    /* border: 1px solid #00ce7c; */
+    color: #00ce7c;
+}
+
+/* Leaderboard */
+
+#lb_heading {
+    font-size: 50px;
+    font-family: "Questrial";
+    color: #00ce7c;
+    text-align: center;
+    letter-spacing: 1.5px;
+}
+
+.highscore-sec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 40px;
+}
+
+.highscore-sec div {
+    font-size: 35px;
+    font-family: "Questrial";
+    padding: 10px;
+    /* height: 30px; */
+    width: 500px;
+    border: 1px solid #00ce7c;
+    color: #9578D3;
+    text-align: center;
+    letter-spacing: 1.5px;
+    margin: 30px;
+    border-radius: 10px;
+}
+
+.end-screen {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 40px;
+    color: #9578D3;
+}
+
+.other-pos {
+    display: flex;
+    flex-direction: row;
+
 }
