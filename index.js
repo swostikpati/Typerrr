@@ -18,7 +18,7 @@ server.listen(PORT, () => {
 app.use("/", express.static("public/page1"))
 
 let datastore = require("nedb");
-let highScoreDB = new datastore({ filename: "highscores.db", timestampData: false });
+let highScoreDB = new datastore({ filename: "highScores.db", timestampData: false });
 let usersDB = new datastore({ filename: "userAuth.db", timestampData: false });
 
 highScoreDB.loadDatabase();
@@ -51,7 +51,9 @@ io.sockets.on("connect", (socket) => {
             if (rooms[socket.roomNo].winners.length > 0) {
                 updateHighscoreDB(rooms[socket.roomNo].winners[0]);
             }
+            rooms[socket.roomNo].positions = {};
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
+            rooms[socket.roomNo].winners = [];
             refreshLeaderboard();
         }
     })
@@ -70,8 +72,6 @@ io.sockets.on("connect", (socket) => {
 
             }
             else {
-
-                console.log("Docs:", docs);
                 if (docs.length > 0) {
                     pswdH = docs[0].password;
                     userExistsFlag = true;
@@ -209,7 +209,9 @@ io.sockets.on("connect", (socket) => {
         if (rooms[socket.roomNo].winners.length >= rooms[socket.roomNo].cap) {
             rooms[socket.roomNo].f = true;
             updateHighscoreDB(rooms[socket.roomNo].winners[0]);
+            rooms[socket.roomNo].positions = {};
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
+            rooms[socket.roomNo].winners = [];
             refreshLeaderboard();
         }
     })
@@ -226,13 +228,14 @@ function updateHighscoreDB(winner) {
             console.log("Error:", err);
         }
         else {
+            console.log(docs);
             prevScore = docs[0].highscore;
+            highScoreDB.update({ username: docs[0].username }, { $set: { highscore: prevScore + 1 } }, { upsert: false }, (err, numReplaced) => {
+                if (err) {
+                    console.log("Error:", err);
+                }
+            });
         }
-        highScoreDB.update({ highscore: prevScore }, { $set: { highscore: prevScore + 1 } }, { upsert: false }, (err, numReplaced) => {
-            if (err) {
-                console.log("Error:", err);
-            }
-        });
     })
 
 }
