@@ -23,25 +23,6 @@ let usersDB = new datastore({ filename: "userAuth.db", timestampData: false });
 
 highScoreDB.loadDatabase();
 usersDB.loadDatabase();
-// app.get("/users", (req, res) => {
-//     res.json(users);
-// })
-
-// app.post("users/login", async (req, res) => {
-//     const user = users.find(user => user.userN === req.body.userN)
-//     if (user == null) {
-//         return res.status(400).send('Cannot find user')
-//     }
-//     try {
-//         if (await bcrypt.compare(req.body.password, user.password)) {
-//             res.send('Success')
-//         } else {
-//             res.send('Not Allowed')
-//         }
-//     } catch {
-//         res.status(500).send()
-//     }
-// })
 
 let io = require("socket.io");
 io = new io.Server(server);
@@ -60,29 +41,18 @@ io.sockets.on("connect", (socket) => {
     //checking disconnection of the specific socket
     socket.on("disconnect", () => {
         console.log("Socket disconnected", socket.id);
-        console.log("Room: ", socket.roomNo);
         rooms[socket.roomNo].cap--;
-        console.log("Room Capacity: ", rooms[socket.roomNo].cap);
         if (rooms[socket.roomNo].f) {
-            console.log("yes buddy");
             io.sockets.to(rooms[socket.roomNo].n).emit("playerDropped");
             io.sockets.to(socket.roomNo).emit("liveRoomStatus", rooms[socket.roomNo].cap);
         }
         if (rooms[socket.roomNo].winners.length >= rooms[socket.roomNo].cap) {
-            rooms[socket.roomNo].f = true; //changed
+            rooms[socket.roomNo].f = true;
             if (rooms[socket.roomNo].winners.length > 0) {
                 updateHighscoreDB(rooms[socket.roomNo].winners[0]);
             }
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
             refreshLeaderboard();
-            // highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
-            //     // console.log(docs);//all docs
-            //     if (err) {
-            //         res.send({ "task": "unsuccessful" })
-            //     } else {
-            //         io.sockets.emit("updateHighscores", { "highscores": docs });
-            //     }
-            // });
         }
     })
 
@@ -103,22 +73,18 @@ io.sockets.on("connect", (socket) => {
 
                 console.log("Docs:", docs);
                 if (docs.length > 0) {
-                    console.log("entered docs");
                     pswdH = docs[0].password;
                     userExistsFlag = true;
                 }
                 else {
-                    console.log("entered here")
                     userExistsFlag = false;
                 }
             }
-            console.log(userExistsFlag);
 
             if (userExistsFlag) {
-                console.log("user exists");
                 bcrypt.compare(data.pass, pswdH, (err, result) => {
                     if (err) {
-                        console.log("Error line 189: ", err);
+                        console.log("Error", err);
                     }
                     // result == true
                     else {
@@ -126,14 +92,11 @@ io.sockets.on("connect", (socket) => {
                             console.log("successful login");
                             loginStatusData = "success";
                             io.sockets.to(socket.id).emit("loginStatus", loginStatusData);
-                            //emit a msg back to the specific client that their login was successful
                         }
                         else {
                             console.log("unsuccessful login");
                             loginStatusData = "failed";
                             io.sockets.to(socket.id).emit("loginStatus", loginStatusData);
-                            //emit a msg back to the specific client that their login failed and ask them to login again (keep prompting them)
-                            //the reason their login failed could be that their username exists already or their password is wrong
                         }
                     }
                 });
@@ -142,11 +105,11 @@ io.sockets.on("connect", (socket) => {
                 bcrypt.hash(data.pass, saltRounds, (err, hash) => {
                     // Store hash in your password DB.
                     if (err) {
-                        console.log("Error line 206: ", err);
+                        console.log("Error", err);
                     }
                     usersDB.insert({ username: data.username, password: hash }, (err, newDoc) => {
                         if (err) {
-                            console.log("Error line 210:", err);
+                            console.log("Error", err);
                         }
                         else {
                             console.log("New user profile created successfully");
@@ -160,7 +123,6 @@ io.sockets.on("connect", (socket) => {
                                 }
                             })
                             io.sockets.to(socket.id).emit("loginStatus", loginStatusData);
-                            //emit a msg saying that their user profile is created and they are logged in succesfully (as an alert)
                         }
 
                     })
@@ -169,43 +131,6 @@ io.sockets.on("connect", (socket) => {
             }
 
         })
-        // console.log(userExistsFlag);
-
-        // if (userExistsFlag) {
-        //     console.log("user exists");
-        //     bcrypt.compare(data.pass, pswdH, (err, result) => {
-        //         if (err) {
-        //             console.log("Error: ", err);
-        //         }
-        //         // result == true
-        //         else {
-        //             if (result) {
-        //                 console.log("successful login");
-        //             }
-        //             else {
-        //                 console.log("unsuccessful login");
-        //             }
-        //         }
-        //     });
-        // }
-        // else {
-        //     bcrypt.hash(data.pass, saltRounds, (err, hash) => {
-        //         // Store hash in your password DB.
-        //         if (err) {
-        //             console.log("Error: ", err);
-        //         }
-        //         usersDB.insert({ username: data.username, password: hash }, (err, newDoc) => {
-        //             if (err) {
-        //                 console.log("Error:", err);
-        //             }
-        //             else {
-        //                 console.log("New user profile created successfully");
-        //             }
-
-        //         })
-
-        //     });
-        // }
 
     })
     refreshLeaderboard();
@@ -223,8 +148,6 @@ io.sockets.on("connect", (socket) => {
             break;
         }
         else {
-            // let a = rooms[i].n;
-            // console.log(a);
             if (rooms[i].f) {
                 io.sockets.to(rooms[i].n).emit("roomFull");
             }
@@ -245,7 +168,6 @@ io.sockets.on("connect", (socket) => {
     if (rooms[socket.roomNo].cap > 3) {
         io.sockets.to(socket.roomNo).emit("roomFull");
     }
-    console.log("Room Capacity: ", rooms[socket.roomNo].cap);
     io.sockets.to(socket.roomNo).emit("roomData", socket.roomNo);
 
     socket.on("raceReady", () => {
@@ -284,30 +206,17 @@ io.sockets.on("connect", (socket) => {
 
     socket.on("raceFinish", (data) => {
         rooms[socket.roomNo].winners.push(data);
-        console.log(rooms[socket.roomNo].winners);
         if (rooms[socket.roomNo].winners.length >= rooms[socket.roomNo].cap) {
-            rooms[socket.roomNo].f = true; //changed
+            rooms[socket.roomNo].f = true;
             updateHighscoreDB(rooms[socket.roomNo].winners[0]);
             io.sockets.to(socket.roomNo).emit("winners", rooms[socket.roomNo].winners);
             refreshLeaderboard();
-            // highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
-            //     // console.log(docs);//all docs
-            //     if (err) {
-            //         res.send({ "task": "unsuccessful" })
-            //     } else {
-            //         io.sockets.emit("updateHighscores", { "highscores": docs });
-            //     }
-            // });
         }
     })
 
 
 })
 
-
-// app.get("/highscores", (req, res) => {
-
-// })
 
 function updateHighscoreDB(winner) {
 
@@ -318,11 +227,8 @@ function updateHighscoreDB(winner) {
         }
         else {
             prevScore = docs[0].highscore;
-            console.log(prevScore);
         }
         highScoreDB.update({ highscore: prevScore }, { $set: { highscore: prevScore + 1 } }, { upsert: false }, (err, numReplaced) => {
-            // numReplaced = 3
-            // Field 'system' on Mars, Earth, Jupiter now has value 'solar system'
             if (err) {
                 console.log("Error:", err);
             }
@@ -333,7 +239,6 @@ function updateHighscoreDB(winner) {
 
 function refreshLeaderboard() {
     highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
-        // console.log(docs);//all docs
         if (err) {
             res.send({ "task": "unsuccessful" })
         } else {

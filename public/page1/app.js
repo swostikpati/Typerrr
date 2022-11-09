@@ -6,12 +6,8 @@ let words;
 let index = 0;
 let userN = "";
 let userP = "";
-let start;
-let end;
 let firstKeyFlag = true;
-// let userAuthFlag = true;
 let userAuthData;
-// let othersPosArr = [];
 
 //DOM elements
 const start_bt = document.querySelector("#start-bt");
@@ -67,8 +63,6 @@ socket.on("loginStatus", (data) => {
 })
 
 socket.on("roomFull", () => {
-    // roomFull = data;
-    console.log("yes");
     start_bt.disabled = false;
     container1_txt.innerHTML = "Players Ready";
 })
@@ -79,18 +73,15 @@ socket.on("startRace", (data) => {
     pre_start.style.display = "none";
     race_time.style.display = "flex";
     words = data;
-    console.log(words);
     untyped.innerHTML += words;
     raceFlag = true;
 })
 
 socket.on("winners", (data) => {
-    console.log(data);
     other_pos.style.display = "flex";
     pos_div1.style.display = "flex";
     restart_bt.style.display = "block";
     waiting.style.display = "none";
-    // waiting.innerHTML = "";
     if (data[0]) {
         pos1.innerHTML = data[0];
     }
@@ -118,18 +109,10 @@ socket.on("winners", (data) => {
     else {
         pos4.innerHTML = "<em>Player left</em?";
     }
-    //changed
-    // pos2.innerHTML = data[1];
-    // pos3.innerHTML = data[2];
-    // pos4.innerHTML = data[3];
-
 })
 
 socket.on("positionUpdate", (data) => {
-    console.log(data.racePos);
     curr_pos.innerText = `${data.racePos}/4`;
-    // othersPosArr = data.othersPos;
-    // positionRefresh(othersPosArr);
     data.othersPos.sort(function (a, b) { return a - b }); //the most important line to remember ever
 
     let arrCorr = [];
@@ -138,28 +121,16 @@ socket.on("positionUpdate", (data) => {
         let othersPos = data.othersPos[i];
 
         if (othersPos >= index && othersPos < words.length) {
-            //show in uptyped part
-            // untyped.innerHTML = untyped.innerHTML.slice(index, othersPos) + `<span class="cursor">|</span>` + untyped.innerHTML.slice(othersPos);
-            // untyped.innerHTML = words.slice(index, othersPos) + `<span class="cursor">|</span>` + words.slice(othersPos);
             arrUn.push(othersPos);
-
         }
         else if (othersPos < index) {
             arrCorr.push(othersPos);
-            //show in typed part
-            // typed_corr.innerHTML = typed_corr.innerHTML.slice(0, othersPos) + `<span class="cursor">|</span>` + typed_corr.innerHTML.slice(othersPos, index);
-            // typed_corr.innerHTML = words.slice(0, othersPos) + `<span class="cursor">|</span>` + words.slice(othersPos, index);
         }
-        // untyped.innerHTML = words.slice(index, othersPos) + `<span class="cursor">|</span>` + words.slice(othersPos);
-        // arrCorr.sort();
-        // arrUn.sort();
     }
-    console.log(arrCorr);
-    console.log(arrUn);
     if (arrCorr[0]) {
         typed_corr.innerHTML = words.slice(0, arrCorr[0]) + `<span class="cursor1">|</span>`;
         for (let i = 0; i < arrCorr.length - 1; i++) {
-            typed_corr.innerHTML += words.slice(arrCorr[i], arrCorr[i + 1]) + `<span class="cursor1">|</span>`; //change 2
+            typed_corr.innerHTML += words.slice(arrCorr[i], arrCorr[i + 1]) + `<span class="cursor1">|</span>`;
         }
         typed_corr.innerHTML += words.slice(arrCorr[arrCorr.length - 1], index);
     }
@@ -173,14 +144,13 @@ socket.on("positionUpdate", (data) => {
             untyped.innerHTML += `<span class="cursor1">|</span>` + words.slice(arrUn[i], arrUn[i + 1]);
 
         }
-        untyped.innerHTML += `<span class="cursor1">|</span>` + words.slice(arrUn[arrUn.length - 1]); //last change
+        untyped.innerHTML += `<span class="cursor1">|</span>` + words.slice(arrUn[arrUn.length - 1]);
     }
 
 
 })
 
 socket.on("playerDropped", () => {
-    console.log("yes1");
     start_bt.disabled = true;
 })
 
@@ -206,33 +176,14 @@ start_bt.addEventListener("click", () => {
 
 //added keypress event - reference "https://www.section.io/engineering-education/keyboard-events-in-javascript/"
 document.addEventListener('keypress', (e) => {
-    // var name = event.key;
-    // var code = event.code;
-    // // Alert the key name and key code on keydown
-    // console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
-    // let key = event.key;
     if (raceFlag) {
-        // if (firstKeyFlag) {
-        //     start = new Date().getTime();
-        //     firstKeyFlag = false;
-        // }
-        // if (e.key == " " && checkKey(e.key)) {
-        //     end = new Date().getTime();
-        //     wpm.innerHTML = `${calculateWPM()} WPM`;
-        //     start = new Date().getTime();
-        // }
         changeCol(checkKey(e.key));
-
     }
 }, false);
 
-// restart_bt.addEventListener("click", () => {
-//     //socket.emit("raceOver")
-// })
 
 
 function checkKey(key) {
-    // console.log(key + ", ", words[index]);
     if (index < words.length && key == words[index]) {
         index++;
         let indexData = {
@@ -247,12 +198,10 @@ function checkKey(key) {
 
 function changeCol(corr) {
     if (corr) {
-        //turn green
         typed_wr.innerHTML = "";
         typed_corr.innerHTML += words[index - 1];
         untyped.innerHTML = `<span class="cursor">|</span>` + words.slice(index);
-        //positionRefresh(othersPosArr);
-        //typed_corr.innerText == words
+
         if (index == words.length) {
 
             console.log("race finished");
@@ -269,15 +218,8 @@ function changeCol(corr) {
 
     }
     else {
-
-        // else {
-        //turn red
         typed_wr.innerHTML = `<span class="cursor">|</span>` + words[index];
         untyped.innerHTML = words.slice(index + 1);
-        //positionRefresh(othersPosArr);
-        // }
-
-
     }
 
 }
@@ -285,7 +227,6 @@ function changeCol(corr) {
 function userAuthCheck() {
     while (userN == "" || userN == null) {
         userN = prompt("Please enter your username:");
-        console.log(userN);
     }
     while (userP == "" || userP == null) {
         userP = prompt("Please enter your password:");
@@ -300,95 +241,6 @@ function userAuthCheck() {
     socket.emit("userAuth", userAuthData);
 }
 
-function calculateWPM() {
-    let time = (end - start);
-    console.log(time);
-    let ans = (5 * 1000 * 60) / time;
-    return ans;
-}
-
-// function refreshHighscores() {
-//     //GET request from the API
-//     fetch("/highscores")
-//         .then(res => res.json())
-//         .then(data => {
-//             let allHighscores = data.highscores;
-//             let i = 0;
-//             while (i < allHighscores.length && i < 10) {
-//                 highscore_sec.innerHTML += `<p class="highscore-rec">${allHighscores[i].username} : ${allHighscores[i].highscore}</p>`;
-//                 i++;
-//             }
-
-
-//             // allChats.forEach((chat) => {
-//             //     chatMsgs.innerHTML += `<li>${chat.name} - ${chat.msg}</li>`
-//             // })
-//             //clear out the HTML div that contains all the messages
-//             //add all the new messages that we have
-//         })
-// }
-// app.get("/messages", (req, res) => {
-//     db.find({}).sort({ createdAt: 1 }).exec((err, docs) => {
-//         // console.log(docs);//all docs
-//         if (err) {
-//             res.send({ "task": "unsuccessful" })
-//         } else {
-//             res.json({
-//                 "msgs": docs
-//             })
-//         }
-
-//     });
-//     // res.json({
-//     //     "msgs": messages
-//     // })
-// })
-// function positionRefresh(othersPos) {
-//     othersPos.sort();
-
-//     let i = 0;
-//     let prevI = 0;
-//     if (othersPos[i] < index) {
-//         typed_corr.innerHTML = "";
-//     }
-//     else {
-//         typed_corr.innerHTML = words.slice(0, index);
-//     }
-//     while (othersPos[i] < index) {
-//         typed_corr.innerHTML += words.slice(prevI, othersPos[i]) + `<span class="cursor">|</span>`;
-//         prevI = othersPos[i];
-//         i++;
-//         if (othersPos[i] >= index) {
-//             typed_corr.innerHTML += words.slice(prevI, index);
-//             prevI = index;
-//         }
-//     }
-
-//     if (i < othersPos.length) {
-//         // if (typed_wr.innerHTML == "") {
-//         //     untyped.innerHTML = `<span class="cursor">|</span>`;
-//         // }
-//         // else {
-//         //     untyped.innerHTML = "";
-//         // }
-//         untyped.innerHTML = "";
-//     }
-//     else {
-//         untyped.innerHTML = words.slice(index);
-//     }
-
-//     while (i < othersPos.length) {
-//         //add if check for wrong scenario
-//         untyped.innerHTML += words.slice(index, othersPos[i]) + `<span class="cursor">|</span>`;
-//         prevI = othersPos[i];
-//         i++;
-//         if (i >= othersPos.length) {
-//             untyped.innerHTML += words.slice(prevI);
-//         }
-//     }
-
-//     // }
-// }
 //use while loop to loop till the end of the string
 //use spans for color
 //use z-index for cursor

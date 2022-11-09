@@ -16,12 +16,10 @@ html {
 
 .typed-corr {
     color: #00ce7c;
-    /* background-color: blue; */
 }
 
 .typed-wr {
     color: red;
-    /* background-color: black; */
 }
 
 .untyped {
@@ -44,9 +42,6 @@ html {
     display: none;
 }
 
-/* .text-display {
-    z-index: -1;
-} */
 .cursor {
     color: #00ce7c;
     font-size: 40px;
@@ -63,7 +58,6 @@ html {
 .cursor,
 .cursor1 {
     animation: blink-animation 1s steps(5, start) infinite;
-    /* -webkit-animation: blink-animation 1s steps(5, start) infinite; */
 }
 
 
@@ -72,12 +66,6 @@ html {
         visibility: hidden;
     }
 }
-
-/* @-webkit-keyframes blink-animation {
-    to {
-        visibility: hidden;
-    }
-} */
 
 body {
     background-color: #181C18;
@@ -205,17 +193,14 @@ body {
 .text-display {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     justify-content: center;
     margin: 250px 150px;
 }
 
 .curr-pos {
-    /* color: #00ce7c; */
     font-family: "Questrial";
     font-size: 35px;
     padding: 10px;
-    /* border: 1px solid #00ce7c; */
     color: #00ce7c;
 }
 
@@ -241,7 +226,6 @@ body {
     font-size: 35px;
     font-family: "Questrial";
     padding: 10px;
-    /* height: 30px; */
     width: 500px;
     border: 1px solid #00ce7c;
     color: #9578D3;
