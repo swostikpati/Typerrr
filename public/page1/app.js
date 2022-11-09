@@ -35,6 +35,8 @@ const room_status = document.querySelector(".room-status");
 const container1_txt = document.querySelector(".container1-txt");
 const navbar = document.querySelector("#heading1");
 const leaderboard = document.querySelector(".leaderboard");
+const other_pos = document.querySelector(".other-pos");
+const pos_div1 = document.querySelector(".pos1-div");
 
 userAuthCheck();
 
@@ -84,11 +86,41 @@ socket.on("startRace", (data) => {
 
 socket.on("winners", (data) => {
     console.log(data);
-    waiting.innerHTML = "";
-    pos1.innerHTML += data[0];
-    pos2.innerHTML += data[1];
-    pos3.innerHTML += data[2];
-    pos4.innerHTML += data[3];
+    other_pos.style.display = "flex";
+    pos_div1.style.display = "flex";
+    waiting.style.display = "none";
+    // waiting.innerHTML = "";
+    if (data[0]) {
+        pos1.innerHTML = data[0];
+    }
+    else {
+        pos1.innerHTML = "Player left";
+    }
+
+    if (data[1]) {
+        pos2.innerHTML = data[1];
+    }
+    else {
+        pos2.innerHTML = "<em>Player left</em?";
+    }
+
+    if (data[2]) {
+        pos3.innerHTML = data[2];
+    }
+    else {
+        pos3.innerHTML = "<em>Player left</em?";
+    }
+
+    if (data[3]) {
+        pos4.innerHTML = data[3];
+    }
+    else {
+        pos4.innerHTML = "<em>Player left</em?";
+    }
+    //changed
+    // pos2.innerHTML = data[1];
+    // pos3.innerHTML = data[2];
+    // pos4.innerHTML = data[3];
 
 })
 
@@ -228,6 +260,7 @@ function changeCol(corr) {
             navbar.style.display = "flex";
             leaderboard.style.display = "block";
             end_screen.style.display = "flex";
+
 
             socket.emit("raceFinish", userN);
         }

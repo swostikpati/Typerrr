@@ -54,6 +54,8 @@ html {
 
 .cursor1 {
     color: #9578d3b6;
+    font-size: 35px;
+
 }
 
 /* cursor animation ref: https: //www.w3docs.com/snippets/css/how-to-create-a-blinking-effect-with-css3-animations.html */
@@ -149,6 +151,10 @@ body {
     font-size: 50px;
 }
 
+.waiting {
+    margin-bottom: 300px;
+}
+
 .container1 div {
     text-align: center;
     margin-bottom: 35px;
@@ -220,6 +226,7 @@ body {
     color: #00ce7c;
     text-align: center;
     letter-spacing: 1.5px;
+    margin-top: 50px;
 }
 
 .highscore-sec {
@@ -248,12 +255,53 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 40px;
+    margin-top: 10px;
     color: #9578D3;
+    height: 85vh;
 }
 
 .other-pos {
-    display: flex;
+    display: none;
     flex-direction: row;
 
+}
+
+.other-pos div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px 50px;
+}
+
+.pos2,
+.pos3,
+.pos4 {
+    font-size: 35px;
+    color: #9578D3;
+
+}
+
+.pos1 {
+    font-size: 45px;
+    color: #00ce7c;
+
+}
+
+.other-pos div img {
+    height: 150px;
+    width: 150px;
+    border-radius: 150px;
+}
+
+.pos1-div {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin: 40px;
+}
+
+.pos1-div img {
+    height: 250px;
+    width: 250px;
+    border-radius: 250px;
 }
