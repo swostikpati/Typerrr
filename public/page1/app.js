@@ -88,6 +88,7 @@ socket.on("winners", (data) => {
     console.log(data);
     other_pos.style.display = "flex";
     pos_div1.style.display = "flex";
+    restart_bt.style.display = "block";
     waiting.style.display = "none";
     // waiting.innerHTML = "";
     if (data[0]) {

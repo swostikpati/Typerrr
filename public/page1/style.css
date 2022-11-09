@@ -193,6 +193,7 @@ body {
     font-family: "Questrial";
     font-size: 40px;
     text-align: center;
+    letter-spacing: 2px;
 
 }
 
@@ -226,7 +227,7 @@ body {
     color: #00ce7c;
     text-align: center;
     letter-spacing: 1.5px;
-    margin-top: 50px;
+    margin-top: 100px;
 }
 
 .highscore-sec {
@@ -288,9 +289,9 @@ body {
 }
 
 .other-pos div img {
-    height: 150px;
-    width: 150px;
-    border-radius: 150px;
+    height: 100px;
+    width: 100px;
+    border-radius: 100px;
 }
 
 .pos1-div {
@@ -301,7 +302,30 @@ body {
 }
 
 .pos1-div img {
-    height: 250px;
-    width: 250px;
-    border-radius: 250px;
+    height: 200px;
+    width: 200px;
+    border-radius: 200px;
+}
+
+#restart-bt {
+    display: none;
+    padding: 15px 25px;
+    margin: 40px;
+    margin-top: 5px;
+    border-radius: 10px;
+    background-color: #9578D3;
+    color: #00ce7c;
+    font-size: 40px;
+    font-family: 'Questrial';
+}
+
+#restart-bt:hover {
+    scale: 1.08;
+    cursor: pointer;
+    background-color: #00ce7c;
+    color: #9578D3;
+}
+
+#restart-bt a {
+    text-decoration: none;
 }
