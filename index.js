@@ -32,6 +32,7 @@ io = new io.Server(server);
 let tr = 0; //current room number
 let rooms = {};
 let newRoomFlag = true;
+let words;
 
 
 io.sockets.on("connect", (socket) => {
