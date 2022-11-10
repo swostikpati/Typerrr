@@ -1,55 +1,43 @@
-# Typerrr
-Connections Lab Midterm Project
+# Typerrr.com
 
 Working Link: https://typerrr.glitch.me
 
-## Project Concept & Idea
+## Project Description
 
-We want to create a multiplayer browser-based online typing game. In this game, players pass types of a set of different texts as quickly as possible, competing with themselves or with other online users simultaneously. For racing, there is the default  option, where players race against each other by typing randomly selected words from a database. We will use p5.js to create the animation of racing cars (or maybe rolling balls) based on the real-time average words per minute (wpm) count of each player. When typing text selections, accuracy is required; any typing errors detected in spelling, capitalization or punctuation must be fixed by the player before continuing with the race. The real-time server client connections will be made using socket.io. We also have plans of adding additional user authentication to create user profiles so as to track the highscores (number of wins and best wpm). This will be achieved by incorporating a database (preferably in NeDB/MongoDB). 
+### Overview
 
-## Inspiration
+/Video
 
-Games like Nitrotype, 10fastfingers, keybr. The primary motivation behind making this game is to allow people to improve their typing skills through a fun and interactive game where they can challenge their friends to a typing race. 
+### Inspiration and Target Audience
 
-## Wireframe of the game
+### Concept
 
-This was the [initial wireframe](https://github.com/swostikpati/Typerrr/blob/main/Wireframes/initial_wireframe.png) of the project. After brainstorming changes, we decided on this [final wireframe](https://github.com/swostikpati/Typerrr/blob/main/Wireframes/final_wireframe.pdf)
+### Wireframing 
 
-## Information Flow
+## Creative Design
 
-• An express app is created
+### User Interface
 
-• An HTTP server is created over the express app
+### User Experience
 
-• Socket.io is added over the HTTP server
+## Technical Design
 
-• A database is setup with Bcrypt to store the username and passwords of users and also their highscores (total number of wins and highest words per minute)
+### Socket.io
 
-• The client initiates a connection to the server by either registering or logging in
+### NeDB Database
 
-• For new users the server first stores the login information in the database.
+### User Authentication - Bcrypt
 
-• For returning users, the server authenticates the information and then either recognizes the client connection or denies the connection
+## Key Challenges and Solutions
 
-• The client on receiving confirmation of connection from the server, acknowledges it.
+## Potential Next Steps
 
-• The server waits for three simultaneous connections before starting the race. On receiving three simultaneous connections, the server puts all of them into a unique room where they can race. 
+## Individual Contribution
 
-• On receiving more than three connections, the server makes multiple of those rooms with three simultaneous clients in each.
+### Swostik Pati
 
-• The race begins with the words to be typed being displayed on the screen of each of the users. The words are taken from the 1k most used english words API. 
+### Aibar Talip
 
-• The server keeps updating the progress of each of the racing clients in real-time (by showcasing the position of their cursor on the screen) and also updates their position in the race which is displayed in the top.
+## References
 
-• As soon as the race ends, the current positions of each of the clients displayed and a win is registered against the person who comes first. 
-
-• The highscore page (containing the top 10 high scores obtained by sorting the database based on total winds in descending order ) is updated at the end of every race to get the most recent stats.
-
-• The end screen also gives the user the option to enter another race. If they choose to do this, the server puts them in another room to race
-
-Run the following code:
-```
-npm install
-npm start
-```
 
