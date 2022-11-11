@@ -244,7 +244,7 @@ function updateHighscoreDB(winner) {
 function refreshLeaderboard() {
     highScoreDB.find({}).sort({ highscore: -1 }).exec((err, docs) => {
         if (err) {
-            res.send({ "task": "unsuccessful" })
+            console.log("Error:", err);
         } else {
             io.sockets.emit("updateHighscores", { "highscores": docs });
         }
