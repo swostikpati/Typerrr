@@ -1,5 +1,7 @@
+/* Importing fonts */
 @import url('https://fonts.googleapis.com/css2?family=Comforter+Brush&family=Questrial&display=swap');
 
+/* Overall desiging of the page */
 * {
     margin: 0;
     padding: 0;
@@ -9,6 +11,7 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Desiging the Race time sections */
 .text-area {
     /* to remove space between padding */
     font-size: 0px;
@@ -35,13 +38,12 @@ html {
 
 }
 
-
-
 .race-time,
 .end-screen {
     display: none;
 }
 
+/* Designing the different cursors */
 .cursor {
     color: #00ce7c;
     font-size: 40px;
@@ -54,7 +56,7 @@ html {
 }
 
 /* cursor animation ref: https: //www.w3docs.com/snippets/css/how-to-create-a-blinking-effect-with-css3-animations.html */
-
+/* Additing animation to the cursor */
 .cursor,
 .cursor1 {
     animation: blink-animation 1s steps(5, start) infinite;
@@ -123,6 +125,7 @@ body {
     color: #00ce7c;
 }
 
+/* Designing the pre-start screen */
 .container1 {
     display: flex;
     justify-content: center;
@@ -163,6 +166,7 @@ body {
     font-family: 'Questrial';
 }
 
+/* Only displaying the button when enabled */
 #start-bt:disabled {
     display: none;
 }
@@ -189,7 +193,7 @@ body {
     height: 100vh;
 }
 
-/* second page */
+/* Desiging the rest of the race-time screen */
 .text-display {
     display: flex;
     flex-direction: column;
@@ -204,7 +208,7 @@ body {
     color: #00ce7c;
 }
 
-/* Leaderboard */
+/* Desigining the Leaderboard */
 
 #lb_heading {
     font-size: 50px;
@@ -235,6 +239,8 @@ body {
     border-radius: 10px;
 }
 
+/* Desigining the End-screen */
+/* Going back and forth in flex direction in the different containers enabled the desired placement */
 .end-screen {
     display: none;
     justify-content: center;

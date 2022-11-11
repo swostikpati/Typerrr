@@ -9,7 +9,7 @@ let userP = "";
 let firstKeyFlag = true;
 let userAuthData;
 
-//DOM elements
+//Selecting DOM elements
 const start_bt = document.querySelector("#start-bt");
 const pre_start = document.querySelector(".pre-start");
 const race_time = document.querySelector(".race-time");
@@ -34,9 +34,10 @@ const leaderboard = document.querySelector(".leaderboard");
 const other_pos = document.querySelector(".other-pos");
 const pos_div1 = document.querySelector(".pos1-div");
 
+//User Authentication
 userAuthCheck();
 
-
+//SOCKETS
 //client acknowledging after server confirmation - connect is a keyword
 socket.on("connect", () => {
     console.log("Connection established to server via sockets");
@@ -46,6 +47,7 @@ socket.on("connect", () => {
 
 })
 
+//Checking the login status sent by the server
 socket.on("loginStatus", (data) => {
     if (data == "success") {
         alert("Logged in successfully!");
@@ -54,7 +56,7 @@ socket.on("loginStatus", (data) => {
         alert("Login Failed! Username already exists or Password Error.")
         userN = "";
         userP = "";
-        userAuthCheck();
+        userAuthCheck(); //is the login failed, asking the user to provide the details again
     }
     if (data == "successCreated") {
         alert("New user profile created and logged in successfully!");
@@ -62,11 +64,13 @@ socket.on("loginStatus", (data) => {
 
 })
 
+//making the client aware that the room is full 
 socket.on("roomFull", () => {
-    start_bt.disabled = false;
+    start_bt.disabled = false; //enabling the race start button
     container1_txt.innerHTML = "Players Ready";
 })
 
+//Intializing the race page
 socket.on("startRace", (data) => {
     leaderboard.style.display = "none";
     navbar.style.display = "none";
@@ -74,18 +78,23 @@ socket.on("startRace", (data) => {
     race_time.style.display = "flex";
     words = data;
     untyped.innerHTML += words;
-    raceFlag = true;
+    raceFlag = true; //race started flag
 })
 
+//receiving and displaying the data about the winners when the race ends
 socket.on("winners", (data) => {
+    //initializing the race-end page
     other_pos.style.display = "flex";
     pos_div1.style.display = "flex";
     restart_bt.style.display = "block";
     waiting.style.display = "none";
+
+    //displaying the data 
     if (data[0]) {
         pos1.innerHTML = data[0];
     }
     else {
+        //ideally if even the person who came first leaves, there is no one to see this
         pos1.innerHTML = "Player left";
     }
 
@@ -111,12 +120,15 @@ socket.on("winners", (data) => {
     }
 })
 
+//receiving the current position
 socket.on("positionUpdate", (data) => {
-    curr_pos.innerText = `${data.racePos}/4`;
-    data.othersPos.sort(function (a, b) { return a - b }); //the most important line to remember ever
+    curr_pos.innerText = `${data.racePos}/4`; //displaying the current position of the user in the race
+    data.othersPos.sort(function (a, b) { return a - b }); //the most important line to remember ever (sorting in JS arrays is based on strings)
 
-    let arrCorr = [];
-    let arrUn = [];
+    //this entire section displays all the cursors currently racing and updates their position in realtime
+    let arrCorr = []; //array stores the indices of the cursors behind the current user's cursor
+    let arrUn = []; //array stores the indices of the cursors after the current user's cursor
+
     for (let i = 0; i < data.othersPos.length; i++) {
         let othersPos = data.othersPos[i];
 
@@ -127,6 +139,7 @@ socket.on("positionUpdate", (data) => {
             arrCorr.push(othersPos);
         }
     }
+    //if a cursor exists behind the current cursor
     if (arrCorr[0]) {
         typed_corr.innerHTML = words.slice(0, arrCorr[0]) + `<span class="cursor1">|</span>`;
         for (let i = 0; i < arrCorr.length - 1; i++) {
@@ -138,6 +151,7 @@ socket.on("positionUpdate", (data) => {
         typed_corr.innerHTML = words.slice(0, index);
     }
 
+    //if a cursor exists ater the current cursor
     if (arrUn[0]) {
         untyped.innerHTML = `<span class="cursor">|</span>` + words.slice(index, arrUn[0]);
         for (let i = 0; i < arrUn.length - 1; i++) {
@@ -150,29 +164,32 @@ socket.on("positionUpdate", (data) => {
 
 })
 
+//if a player drops before the race has started
 socket.on("playerDropped", () => {
-    start_bt.disabled = true;
+    start_bt.disabled = true; //the start button is disabled again 
 })
 
+//highscores are updated in the leaderboard
 socket.on("updateHighscores", (data) => {
     let allHighscores = data.highscores;
     let i = 0;
     highscore_sec.innerHTML = "";
+    //the top 5 highscores sent from the server's database are displayed
     while (i < allHighscores.length && i < 5) {
         highscore_sec.innerHTML += `<div class="highscore-rec">${allHighscores[i].username} : ${allHighscores[i].highscore}</div>`;
         i++;
     }
 })
 
-
+//displaying the number of people in the room in realtime
 socket.on("liveRoomStatus", (data) => {
     room_status.innerHTML = `${data}/4`
 })
 
+//EVENT LISTENERS
 start_bt.addEventListener("click", () => {
     socket.emit("raceReady");
 })
-
 
 //added keypress event - reference "https://www.section.io/engineering-education/keyboard-events-in-javascript/"
 document.addEventListener('keypress', (e) => {
@@ -182,30 +199,34 @@ document.addEventListener('keypress', (e) => {
 }, false);
 
 
-
+//FUNCTIONS
+//checks if the correct character was pressed by the user
 function checkKey(key) {
     if (index < words.length && key == words[index]) {
-        index++;
+        index++; //position of the cursor incremented
         let indexData = {
             username: userN,
             posI: index
         }
-        socket.emit("indexUpdate", indexData);
+        socket.emit("indexUpdate", indexData); //emits to the server the updated position of the client's cursor
         return true;
     }
     return false;
 }
 
+//colors are changed of the text based on what was typed
 function changeCol(corr) {
     if (corr) {
         typed_wr.innerHTML = "";
         typed_corr.innerHTML += words[index - 1];
         untyped.innerHTML = `<span class="cursor">|</span>` + words.slice(index);
 
+        //when there are no more characters left in the word string, the client has finished the race
         if (index == words.length) {
 
             console.log("race finished");
             raceFlag = false;
+            //setting up the end-screen/waiting page
             race_time.style.display = "none";
             navbar.style.display = "flex";
             leaderboard.style.display = "block";
@@ -224,6 +245,7 @@ function changeCol(corr) {
 
 }
 
+//prompting the user to input username and password until they input something
 function userAuthCheck() {
     while (userN == "" || userN == null) {
         userN = prompt("Please enter your username:");
@@ -238,22 +260,6 @@ function userAuthCheck() {
         pass: userP
     }
 
-    socket.emit("userAuth", userAuthData);
+    socket.emit("userAuth", userAuthData); //emitting the user data to the server
 }
 
-//use while loop to loop till the end of the string
-//use spans for color
-//use z-index for cursor
-//everytime the index changes - emit to the server based on which current position will be known
-//add the check where one person leaves in the middle of the race...timeout
-
-//if someone exits before start...disable start
-
-//one way that might work is to give a class to the cursor specifically and animating it in css
-//fix the case where all four are activated
-
-//user authentication
-//database for highscores and user profiles
-//styling
-//going back to the main page
-//add wpm

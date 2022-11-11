@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Typerrr.com</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Including sockets -->
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 
 </head>
@@ -22,34 +23,49 @@
             </ul>
         </nav>
     </header>
+    <!-- First screen users see -->
     <section class="pre-start">
         <div class="container1">
+            <!-- Displaying the room status and waiting message-->
             <div class="room-status">1/4</div>
             <p class="container1-txt">Waiting for players to join...</p>
+            <!-- Start race button that is disabled -->
             <button id="start-bt" disabled>Start Race</button>
         </div>
+        <!-- A quote -->
         <p class="quote">"Beat cursors to the finish line!"</p>
     </section>
+
+    <!-- Screen displayed during race -->
     <section class="race-time">
-
         <div class="text-display">
+            <!-- Displaying the current position in the race -->
             <p class="curr-pos">1/4</p>
+            <!-- Text area where the user types -->
             <p class="text-area">
+                <!-- Span element for the correctly typed characters -->
                 <span class="typed-corr"></span>
+                <!-- Span element for the incorrectly typed characters -->
                 <span class="typed-wr"></span>
-                <span class="untyped"><span class="cursor">|</span></span>
-
-
+                <!-- Span element for the cursor and the untyped characters -->
+                <span class="untyped">
+                    <!-- Cursor to initially display before the user starts typing -->
+                    <span class="cursor">|</span>
+                </span>
             </p>
         </div>
-
     </section>
+
+    <!-- Screen displayed after race ends -->
     <section class="end-screen">
+        <!-- Initial waiting screen -->
         <p class="waiting">Waiting for results...</p>
+        <!-- Div for first postion -->
         <div class="pos1-div">
             <img src="./assets/pos1.png" alt="first position">
             <div class="pos1"> </div>
         </div>
+        <!-- Divs for all other positions -->
         <div class="other-pos">
             <div>
                 <img src="./assets//pos2.png" alt="second position">
@@ -64,15 +80,17 @@
                 <div class="pos4"> </div>
             </div>
         </div>
+        <!-- Button to restart the race which just reloads the page -->
         <button id="restart-bt"><a href="./index.html">Restart</a></button>
-
     </section>
+
+    <!-- Leaderboard -->
     <section class="leaderboard">
         <p id="lb_heading">Leaderboard</p>
-        <div class="highscore-sec">
-
-        </div>
+        <!-- Div which displays the leaderboard records -->
+        <div class="highscore-sec"></div>
     </section>
+
 
     <script src="app.js"></script>
 </body>
