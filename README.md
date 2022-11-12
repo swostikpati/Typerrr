@@ -44,7 +44,7 @@ As the user starts typing, the color of the text changes based on their input. I
 
 When a player finishes the race, they are greeted with a waiting screen so as to increase anticipation for the winners. When all connected players finish the race, the results are displayed with the usernames of the all the players where they get to see, for the very first time, who they were racing with. 
 
-We designed almost all the graphics used in the application by ourselves including the [logo]().
+We designed almost all the graphics used in the application by ourselves including the [logo](https://github.com/swostikpati/Typerrr/blob/main/public/page1/assets/typerrr_logo.png).
 
 The entire user experience is based on keeping the users as much in the loop as possible of the presence and actions of other players in the game, while at the same time minimize the excessive elements and distractions. We have tried out best to share loads of information across users in realtime though small non-distracting elements. All these design decisions strengthen our argument of making a minimilastic application.
 
