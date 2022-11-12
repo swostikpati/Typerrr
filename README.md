@@ -30,7 +30,7 @@ The final concept that we decided on was to use the cursors as a way of racing a
 
 ### Wireframing 
 
-This was our [initial wireframe](). After some deliberations and changes, we ended up with this as our [final wireframe](). While building the application we did make some other changes while mostly following the initially laid out plan.
+This was our [initial wireframe](https://github.com/swostikpati/Typerrr/blob/main/Wireframes/initial_wireframe.png). After some deliberations and changes, we ended up with this as our [final wireframe](https://github.com/swostikpati/Typerrr/blob/main/Wireframes/final_wireframe.pdf). While building the application we did make some other changes while mostly following the initially laid out plan.
 
 ## Creative Design
 
@@ -68,69 +68,69 @@ The next time the same user logs in and their username returns a record from the
 
 ### Data 
 
-Even though the application doesn't make any explicit calls, we use data from the 1000 most used english words. It is present in the form of a json file that is taken from [this](). The JSON file is imported to the server side and bunch of words randomly selected from the file are relayed to the clients as typing tests.
+Even though the application doesn't make any explicit calls, we use data from the 1000 most used english words. It is present in the form of a json file that is taken from [this](https://gist.github.com/deekayen/4148741). The JSON file is imported to the server side and bunch of words randomly selected from the file are relayed to the clients as typing tests.
 
 ## Key Challenges and Solutions
 
 ### Sockets:
 
--- Having specific number of players in each room - Restricting the number of users to 4 in every room was a difficult task to begin with. New rooms had to be created everytime all the previous rooms were full and the client was made to join the newly created room. Only when a room had 4 people, the Race Start button was enabled and made visible to all the clients in the room.
+• Having specific number of players in each room - Restricting the number of users to 4 in every room was a difficult task to begin with. New rooms had to be created everytime all the previous rooms were full and the client was made to join the newly created room. Only when a room had 4 people, the Race Start button was enabled and made visible to all the clients in the room.
 
--- Increasing reusability of existing rooms - We could just keep creating new rooms and putting in more people. But the problem here would be many of the rooms might start off as full but due to a client disconnection, there would be vacancies created in those rooms. In such scenarios, the remaining users won't be able to start the race as the room capacity of 4 won't be reached. Also when a race ends, new players must be able to join the room if the room has vacancies. To mitigate all these issues and put less load on the servers, we decided on reusing existing rooms whenever vacanies came up. Every time a user joined, all the rooms were checked through to see if there were any vacancies in them and new rooms were only created if all of the pre-existing rooms were full.
+• Increasing reusability of existing rooms - We could just keep creating new rooms and putting in more people. But the problem here would be many of the rooms might start off as full but due to a client disconnection, there would be vacancies created in those rooms. In such scenarios, the remaining users won't be able to start the race as the room capacity of 4 won't be reached. Also when a race ends, new players must be able to join the room if the room has vacancies. To mitigate all these issues and put less load on the servers, we decided on reusing existing rooms whenever vacanies came up. Every time a user joined, all the rooms were checked through to see if there were any vacancies in them and new rooms were only created if all of the pre-existing rooms were full.
 
--- Keeping track of player's cursor precise positions at all times - The cursor data of each of the user had to be constantly sent to all the clients in every room so that they are able to see the cursors of all the players in real time. To keep track of this, everytime a user typed a correct character, the updated index position was immediately sent to the server which stored it to be relayed further.
+• Keeping track of player's cursor precise positions at all times - The cursor data of each of the user had to be constantly sent to all the clients in every room so that they are able to see the cursors of all the players in real time. To keep track of this, everytime a user typed a correct character, the updated index position was immediately sent to the server which stored it to be relayed further.
 
--- Keeping track of player's positions (in the context of the entire race) at all times - The players had to be constantly updated about their position in the context of the race. To do this, we used the index values of their cursors and found their positions based on where their cursor indexes lied. This was then relayed to the users everytime they typed a new key.
+• Keeping track of player's positions (in the context of the entire race) at all times - The players had to be constantly updated about their position in the context of the race. To do this, we used the index values of their cursors and found their positions based on where their cursor indexes lied. This was then relayed to the users everytime they typed a new key.
 
--- Keeping track of disconnections - Dealing with client disconnections were a huge part of the successful implementation of the game. There were so many cases to look for when a client disconnects (discussed in detail in the here). During testing we faced several issues that arised from a client disconnecting that led to the game not starting or ending that were detrimental to the user experience.
+• Keeping track of disconnections - Dealing with client disconnections were a huge part of the successful implementation of the game. There were so many cases to look for when a client disconnects (discussed in detail in the here). During testing we faced several issues that arised from a client disconnecting that led to the game not starting or ending that were detrimental to the user experience.
 
--- Keeping track of race start and race finish - It was very important to always keep a track of all the races going on in different rooms as based on that the rooms that the new users will be put into was decided. Knowing when the race started was important as no other players could be allowed in even if there were vacancies that opened up due to client disconnections during the race. Knowing when the race finished was even more important as the winners had to be declared instantly and the rooms had to be opened up for other clients to join in if a existing client got disconnected.
+• Keeping track of race start and race finish - It was very important to always keep a track of all the races going on in different rooms as based on that the rooms that the new users will be put into was decided. Knowing when the race started was important as no other players could be allowed in even if there were vacancies that opened up due to client disconnections during the race. Knowing when the race finished was even more important as the winners had to be declared instantly and the rooms had to be opened up for other clients to join in if a existing client got disconnected.
 
 ### Database and Bcrypt:
 
--- Querying specific records and updating specific attributes - It required going through a lot of documentation to understand how to query in records from the database based on specific fields and data values. The more difficult task was updating as NeDB's update command came with a lot of additional attributes and wasn't really realtime which could mess up the leaderboard data.
+• Querying specific records and updating specific attributes - It required going through a lot of documentation to understand how to query in records from the database based on specific fields and data values. The more difficult task was updating as NeDB's update command came with a lot of additional attributes and wasn't really realtime which could mess up the leaderboard data.
 
--- Understanding and integrating Bcrypt with the database - Working with the database was made even more difficult with the integration of Bcrypt for user authentication. Most of the existing tutorials on the internet were based on async and await functions that we wanted to avoid for the purpose of the code. After spending quite a lot of time going through the documentation of both Bcrypt and NeDB, we were finally able to integrate them that allowed password encryption and increased security.
+• Understanding and integrating Bcrypt with the database - Working with the database was made even more difficult with the integration of Bcrypt for user authentication. Most of the existing tutorials on the internet were based on async and await functions that we wanted to avoid for the purpose of the code. After spending quite a lot of time going through the documentation of both Bcrypt and NeDB, we were finally able to integrate them that allowed password encryption and increased security.
 
 ### Client Side:
 
--- Handling edge cases with user authentication - Users can be unpredictable and so we had to mitigate all possible ways a user's interaction could break our code to ensure the smooth running of our application. This involved validating inputs provided by the user so that the other pieces of our code which require valid user inputs don't throw in exceptions.
+• Handling edge cases with user authentication - Users can be unpredictable and so we had to mitigate all possible ways a user's interaction could break our code to ensure the smooth running of our application. This involved validating inputs provided by the user so that the other pieces of our code which require valid user inputs don't throw in exceptions.
 
--- Implementing the typing part - We thought through quite a lot of ideas of implementing the typing part before arriving at the final implementation. The initial idea was to have the text in a div and an input text box above it using stacking (z-index). The users would type in the text box and would see the cursor move through the screen across the text in the div. But upon tryping to implement this, the code didn't provide us with the desired results. That is when we looked into this option of moving through the letters of the div itself. We accepted in the inputs from the user using the "Keypress" event listener.
+• Implementing the typing part - We thought through quite a lot of ideas of implementing the typing part before arriving at the final implementation. The initial idea was to have the text in a div and an input text box above it using stacking (z-index). The users would type in the text box and would see the cursor move through the screen across the text in the div. But upon tryping to implement this, the code didn't provide us with the desired results. That is when we looked into this option of moving through the letters of the div itself. We accepted in the inputs from the user using the "Keypress" event listener.
 
--- Color coding different parts of the text - Color coding was only possible if we would be able to apply different styles inside the div. The way we chose to apply this was to have different span elements in our code each having assigned a separate class with different color styles. Based on the input of the user, we segregated the text present in the div into separate spans. This segregation was updated after every key stroke. This is how we were able to color code the different part of the typing test based on user input.
+• Color coding different parts of the text - Color coding was only possible if we would be able to apply different styles inside the div. The way we chose to apply this was to have different span elements in our code each having assigned a separate class with different color styles. Based on the input of the user, we segregated the text present in the div into separate spans. This segregation was updated after every key stroke. This is how we were able to color code the different part of the typing test based on user input.
 
--- Fixing the spans in a specific place - Adding the spans introduced another problem. Somehow there was a inbuilt space that always arised between two span elements. This caused the entire text to shift after every keystroke making the user experience of typing very bad. After trying out several options with changing the display type, changing margins, padding, etc. we finally found a solution on the internet that required us to make the font size of the parent container set to 0. This way worked out.
+• Fixing the spans in a specific place - Adding the spans introduced another problem. Somehow there was a inbuilt space that always arised between two span elements. This caused the entire text to shift after every keystroke making the user experience of typing very bad. After trying out several options with changing the display type, changing margins, padding, etc. we finally found a solution on the internet that required us to make the font size of the parent container set to 0. This way worked out.
 
--- Creating a moving cursor that smoothly goes through the text - Since the user wasn't really typing in a input box, we had no cursor that went through the text. The only way to implement this was to add a physical vertical bar (we decided on using "|") and moving it through the text inside the div after every keypress (based on the user input). To make the experience even better, we added additional blinking animation and styles to the cursor.
+• Creating a moving cursor that smoothly goes through the text - Since the user wasn't really typing in a input box, we had no cursor that went through the text. The only way to implement this was to add a physical vertical bar (we decided on using "|") and moving it through the text inside the div after every keypress (based on the user input). To make the experience even better, we added additional blinking animation and styles to the cursor.
 
--- Displaying the realtime positions of all the cursors - This was perhaps the hardest parts of the entire project. To display the realtime position of the cursors of all the players in a room to all the players currently typing. It was extremely difficult cause the the position of each of the users were getting updated very rapidly and to be able to display the cursor at specific indexes in the the text div was even more difficult as we also had to determine which cursor was behind the primary cursor and which one was ahead. We had to make separate arrays which segregated the cursors before and after the primary cursor and sorted them. The biggest mistake we made that took hours to fix was not using the sort() function properly. We assumed that JS sort() works in a similar way as the sort functions of other coding languages work. Little did we know that JS sort() sorts everything as strings. This messed up the entire order of the text and position of cursors in the div repeatedly messing everything up. We tried out debugging the problem in every way possible, but all our attempts were in vain. It was only after we understood our mistake and fixed it, that the code gave us the desired results.
+• Displaying the realtime positions of all the cursors - This was perhaps the hardest parts of the entire project. To display the realtime position of the cursors of all the players in a room to all the players currently typing. It was extremely difficult cause the the position of each of the users were getting updated very rapidly and to be able to display the cursor at specific indexes in the the text div was even more difficult as we also had to determine which cursor was behind the primary cursor and which one was ahead. We had to make separate arrays which segregated the cursors before and after the primary cursor and sorted them. The biggest mistake we made that took hours to fix was not using the sort() function properly. We assumed that JS sort() works in a similar way as the sort functions of other coding languages work. Little did we know that JS sort() sorts everything as strings. This messed up the entire order of the text and position of cursors in the div repeatedly messing everything up. We tried out debugging the problem in every way possible, but all our attempts were in vain. It was only after we understood our mistake and fixed it, that the code gave us the desired results.
 
 ### Handling Misc Edge Cases
 
--- What if a client disconnects after joining a room?
+• What if a client disconnects after joining a room?
 
--- What if a client disconnects from a room after the start button is already displayed?
+• What if a client disconnects from a room after the start button is already displayed?
 
--- What if a client disconnects mid race. How does the race end? 
+• What if a client disconnects mid race. How does the race end? 
 
--- What if a client disconnects as the last player in a race?
+• What if a client disconnects as the last player in a race?
 
--- What happens when the client closes the prompt box for user authentication or doesn't enter anything at all?
+• What happens when the client closes the prompt box for user authentication or doesn't enter anything at all?
 
 ## Bugs and issues
 
 ## Potential Next Steps
 
-- Fixing all bugs and issues
+• Fixing all bugs and issues
 
-- Giving the users the ability to create private rooms on their own to play with their fiends
+• Giving the users the ability to create private rooms on their own to play with their fiends
 
-- Increasing the types of typing tests available. 
+• Increasing the types of typing tests available. 
 
-- Providing both light and dark themes for the users to switch based on their requirement
+• Providing both light and dark themes for the users to switch based on their requirement
 
-- Increasing support and accessibility for visually impaired people - Touch typing is for everyone!
+• Increasing support and accessibility for visually impaired people - Touch typing is for everyone!
 
 ## Individual Contribution
 
@@ -150,11 +150,15 @@ The feedback that we got from the user testers were as follows:
 
 ## References
 
-[Node JS]()
-[Express JS]()
-[Socket.io]()
-[NeDB] ()
-[Bcrypt]()
+• [Node JS](https://nodejs.org/en/)
+
+• [Express JS](https://expressjs.com/)
+
+• [Socket.io](https://socket.io/)
+
+• [NeDB](https://github.com/louischatriot/nedb)
+
+• [Bcrypt](https://www.npmjs.com/package/bcrypt)
 
 
 
