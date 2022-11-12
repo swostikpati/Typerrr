@@ -527,11 +527,9 @@ Swostik implemented majority of the sockets, databases, and user authentication 
 
 ## User Testing
 
-We conducted user testing with several people. These are some of the images and video clips of them using the website with absolutely no involvement of the creators:
+We conducted user testing with several people.This is a video clip of them using the website with absolutely no involvement of the creators:
 
-
-The feedback that we got from the user testers were as follows:
-/photos
+Uploading User Testing Video - 1.mp4…
 
 ## References
 
