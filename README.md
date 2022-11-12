@@ -521,9 +521,11 @@ Even after tons of user testing and debugging, there are some bugs that still re
 
 ### Swostik Pati
 
-Swostik implemented majority of the sockets, databases, and user authentication part. He had an important role in implementing the typing and race element. He also contributed a lot to the front-end designing part. 
+Swostik implemented majority of the sockets, databases, and user authentication part. He had an important role in implementing the typing test and race element. He also contributed a lot to the front-end designing part especially in designing the graphic elements on canva, creating the final wireframe on figma, deciding on the overall theme of the application, and implementing the styling as a whole. The documentation is written by Swostik.
 
 ### Aibar Talip
+
+Aibar designed the initial wireframe of the application. He play-tested several existing applications and had an important role in finding out the problems with the applications and their positive aspects that we later decided to use in our application. He also looked into Bcrypt and had an important role in helping with the styling and design decisions.
 
 ## User Testing
 
