@@ -8,7 +8,9 @@ Working Link: https://typerrr.glitch.me
 
 Typerrr is an online multiplayer type-racing game, where people simultaneously finish typing tests (derived from the 1000 most spoken English words database), while competing with each other and seeing the cursor positions of all players in realtime. Our project uses Socket.io for realtime multiplayer connections, NeDB database to store user profiles and highscores, and Bcrypt for user authentication and login. The video below showcases the working of the entire website:
 
-/Video
+
+https://user-images.githubusercontent.com/67205637/229316448-faf26976-87cf-4cf5-8ee0-127587a2906b.mp4
+
 
 ### Inspiration and Target Audience
 
