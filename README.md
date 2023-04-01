@@ -529,9 +529,12 @@ Aibar designed the initial wireframe of the application. He play-tested several 
 
 ## User Testing
 
-We conducted user testing with several people.This is a video clip of them using the website with absolutely no involvement of the creators:
+We conducted user testing with several people. This is a video clip of them using the website with absolutely no involvement of the creators:
 
-Uploading User Testing Video - 1.mp4…
+
+https://user-images.githubusercontent.com/67205637/229315972-c5624909-8e53-4af2-a6f8-bd3cf59be869.mp4
+
+
 
 ## References
 
